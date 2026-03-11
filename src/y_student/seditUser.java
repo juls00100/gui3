@@ -679,7 +679,7 @@ this.dispose();
     }//GEN-LAST:event_jLabel13MouseClicked
 
     private void userMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userMouseClicked
-        evaluate eFrame = new evaluate();
+        studEvaluate eFrame = new studEvaluate();
         eFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_userMouseClicked

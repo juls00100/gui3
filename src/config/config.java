@@ -29,10 +29,9 @@ import javax.swing.ImageIcon;
         private static String currentName;
         private static String currentEmail;
         private static String currentType;
-        private static String currentImage; 
-
+        private static String currentImage;
         // SETTER: Ito ang naglalagay ng laman sa variables
-        public static void setSession(String id, String name, String email, String type, String image) {
+public static void setSession(String id, String name, String email, String type, String image) {
             currentID = id;
             currentName = name;
             currentEmail = email;
@@ -42,7 +41,7 @@ import javax.swing.ImageIcon;
         public static String getOnlineID() {
         return currentID;
     }
-       
+    
     public static String getID() { return currentID; }
     public static String getName() { return currentName; }
     public static String getEmail() { return currentEmail; }

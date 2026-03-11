@@ -212,18 +212,15 @@ public class logIn extends javax.swing.JFrame {
             String status = rs.getString("u_status");
             String type = rs.getString("u_type");
 
-            // 3. Check if account is approved
-            if (!status.equalsIgnoreCase("Active") && !status.equalsIgnoreCase("Approved")) {
+            if (!status.equalsIgnoreCase("pending") && !status.equalsIgnoreCase("Approved")) {
                 JOptionPane.showMessageDialog(null, "Your account is " + status + ". Please contact the Administrator.");
             } else {
-                // 4. SUCCESS! Save user details into the static config session
-                // This ensures other forms like 'evaluate.java' can access the User ID.
                 config.setSession(
                     rs.getString("u_id"),
                     rs.getString("u_name"),
                     rs.getString("u_email"),
                     rs.getString("u_type"),
-                    rs.getString("u_image") // Path to profile picture
+                    rs.getString("u_image")
                 );
 
                 JOptionPane.showMessageDialog(null, "Login Successful!");

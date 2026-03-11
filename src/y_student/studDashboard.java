@@ -347,7 +347,7 @@ public class studDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel13MouseClicked
 
     private void userMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userMouseClicked
-        evaluate eFrame = new evaluate();
+        studEvaluate eFrame = new studEvaluate();
         eFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_userMouseClicked
@@ -384,6 +384,7 @@ public class studDashboard extends javax.swing.JFrame {
             "Do you really want to log out?", "Logout", javax.swing.JOptionPane.YES_NO_OPTION);
 
         if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            
             config.setSession(null, null, null, null, null);
             logIn loginFrame = new logIn();
             loginFrame.setVisible(true);
