@@ -344,22 +344,21 @@ public static void setSession(String id, String name, String email, String type,
 }
     //LOGS NI
      
-        public void logEvent(String action) {
-           try {
-               // Use your existing currentID from the session
-               String sql = "INSERT INTO tbl_logs (u_id, l_action) VALUES (?, ?)";
-               Connection conn = DriverManager.getConnection("jdbc:sqlite:aes.db");
-               PreparedStatement pst = conn.prepareStatement(sql);
-               pst.setString(1, currentID); 
-               pst.setString(2, action);
-               pst.executeUpdate();
-               pst.close();
-               conn.close();
-           } catch (SQLException e) {
-               System.out.println("Log Error: " + e.getMessage());
-           }
-       }
+       public void logEvent(String action) {
+    String sql = "INSERT INTO tbl_logs (u_id, l_action) VALUES (?, ?)";
+    // Using try-with-resources automatically closes Connection and PreparedStatement
+    try (Connection conn = DriverManager.getConnection("jdbc:sqlite:aes.db");
+         PreparedStatement pst = conn.prepareStatement(sql)) {
+        
+        pst.setString(1, currentID); 
+        pst.setString(2, action);
+        pst.executeUpdate();
+    } catch (SQLException e) {
+        System.out.println("Log Error: " + e.getMessage());
+    }
+}
 
+       
     }
     
     

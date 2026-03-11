@@ -189,7 +189,7 @@ public class logIn extends javax.swing.JFrame {
     }//GEN-LAST:event_emailsActionPerformed
 
     private void backlabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backlabelMouseClicked
-       
+
         Javagui javaguiFrame = new Javagui();
         javaguiFrame.setVisible(true);
         this.dispose();
@@ -225,25 +225,20 @@ public class logIn extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(null, "Login Successful!");
 
-                // 5. Redirect based on User Type
                 if (type.equals("Admin")) {
                     new x_admin.adminDashboard().setVisible(true);
                 } else if (type.equals("Student")) {
                     new y_student.studDashboard().setVisible(true);
                 } else if (type.equals("Teacher")) {
-                    // Make sure this package/class exists in your project
-                    // new z_teacher.teacherDashboard().setVisible(true); 
-                    JOptionPane.showMessageDialog(null, "Teacher Dashboard coming soon.");
+                    new z_teacher.tDashboard().setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "User type not recognized.");
                     return;
                 }
                 
-                // Close the login form
                 this.dispose();
             }
         } else {
-            // User not found in database
             JOptionPane.showMessageDialog(null, "INVALID EMAIL OR PASSWORD.");
             emails.setText(""); 
             passs.setText("");

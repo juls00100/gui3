@@ -66,7 +66,7 @@ public class studEvaluate extends javax.swing.JFrame {
     
     private void handleFinalSubmission() {
         if (isSubmitted) return; 
-    isSubmitted = true;
+        
         if (teacherDropdown.getSelectedItem() == null || 
             teacherDropdown.getSelectedItem().toString().equals("Select a Teacher")) {
             JOptionPane.showMessageDialog(null, "Please select a teacher before submitting.");
@@ -76,24 +76,25 @@ public class studEvaluate extends javax.swing.JFrame {
     String teacherName = teacherDropdown.getSelectedItem().toString();
     String studentID = config.getID(); 
     String remarks = txtComments.getText();
-    double score = 0;
+    if (remarks.isEmpty()) {
+        remarks = "No specific comments provided.";
+    }
+    double total = 0.00;
+    for (int s : scores) total += s;
+    
+    double rawAverage = (scores.isEmpty()) ? 0 : total / scores.size();
+    double average = Math.round(rawAverage * 100.0) / 100.0;
     String year = "2025-2026";
     String sem = "2nd Semester";
-    double total = 0;
-    for (int s : scores) total += s;
-    double average = (scores.isEmpty()) ? 0 : total / scores.size();
     
     String sql = "INSERT INTO tbl_evaluation (t_u_id, s_u_id, e_remarks, e_average, e_year, e_sem, e_date) " +
                  "VALUES ((SELECT t_u_id FROM tbl_teacher WHERE t_name = ?), ?, ?, ?, ?, ?, DATE('now'))";
     
-    if (remarks.trim().isEmpty()) {
-        remarks = "No specific comments provided.";
-    }
-        
- 
     try (Connection conn = DriverManager.getConnection("jdbc:sqlite:aes.db");
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
         
+        isSubmitted = true;
+                
         pstmt.setString(1, teacherDropdown.getSelectedItem().toString());
         pstmt.setString(2, config.getID());
         pstmt.setString(3, txtComments.getText());
@@ -103,17 +104,17 @@ public class studEvaluate extends javax.swing.JFrame {
         
         pstmt.executeUpdate();
         
-        pstmt.executeUpdate();
         scores.clear();
-        System.out.println("Saving for: " + studentID + " Year: " + year + " Sem: " + sem);
-        JOptionPane.showMessageDialog(null, "Evaluation Saved with Score: " + average);
+        JOptionPane.showMessageDialog(null, "Evaluation Saved! \nAverage Score: " + average);
         new studDashboard().setVisible(true);
         this.dispose();
         
     } catch (SQLException e) {
-        //isSubmitting = false;
+        isSubmitting = false;
         JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage());
     }
+    
+    
 }
     private void loadQuestions() {
         String sql = "SELECT q_text FROM tbl_question ORDER BY q_id ASC";
@@ -137,24 +138,24 @@ public class studEvaluate extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage());
         }
     }
-    private void loadTeachers() {
-        String sql = "SELECT t_name FROM tbl_teacher"; // Adjust table/column name if different in your DB
-
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:aes.db");
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            teacherDropdown.removeAllItems(); // Clear any existing items
-            teacherDropdown.addItem("Select a Teacher"); // Optional: Add a placeholder
-
-            while (rs.next()) {
-                teacherDropdown.addItem(rs.getString("t_name"));
-            }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Error loading teachers: " + e.getMessage());
+    public void loadTeachers() {
+    try {
+        config conf = new config();
+        String query = "SELECT u_name FROM tbl_user " +
+                       "WHERE u_type = 'Teacher' " +
+                       "AND u_id NOT IN (SELECT t_u_id FROM tbl_evaluation WHERE s_u_id = '" + config.getID() + "')";
+        
+        ResultSet rs = conf.getData(query);
+        teacherDropdown.removeAllItems();
+        teacherDropdown.addItem("Select a Teacher");
+        
+        while (rs.next()) {
+            teacherDropdown.addItem(rs.getString("u_name"));
         }
+    } catch (SQLException e) {
+        System.out.println("Error loading teachers: " + e.getMessage());
     }
+}
     
       
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -600,7 +601,7 @@ public class studEvaluate extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
-        userAccount accFrame = new userAccount();
+        sUserAccount accFrame = new sUserAccount();
         accFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_accountMouseClicked
@@ -648,8 +649,8 @@ public class studEvaluate extends javax.swing.JFrame {
     }//GEN-LAST:event_BackMouseClicked
 
     private void account1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_account1MouseClicked
-        sysLogs tt = new sysLogs();
-        tt.setVisible(true);
+         logsStudent lS = new logsStudent();
+        lS.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_account1MouseClicked
 
@@ -670,7 +671,7 @@ public class studEvaluate extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutMouseClicked
 
     private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
-        userAccount accFrame = new userAccount();
+        sUserAccount accFrame = new sUserAccount();
         accFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_profileMouseClicked
@@ -738,6 +739,7 @@ public class studEvaluate extends javax.swing.JFrame {
             jPanel7.repaint();
         }
     } else if (NEXT.getText().equals("SAVE")) {
+       
         handleFinalSubmission(); 
     }
     }//GEN-LAST:event_NEXTMouseClicked

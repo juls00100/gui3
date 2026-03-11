@@ -7,7 +7,6 @@ package y_student;
 
 import authenticate.logIn;
 import config.config;
-import x_admin.sysLogs;
 import x_admin.userAccount;
 
 /**
@@ -20,9 +19,17 @@ public class sUserAccount extends javax.swing.JFrame {
      * Creates new form sUserAccount
      */
     public sUserAccount() {
+        if (config.stopIllegalAccess(this)) return;
         initComponents();
         
         displayDetails();
+        config conf = new config();
+        conf.logEvent("User Logged In");
+        conf.manageHover(a);
+        conf.manageHover(e);
+        conf.manageHover(d);
+        conf.manageHover(g);
+        conf.manageHover(h);
     }
 
     /**
@@ -446,8 +453,8 @@ public class sUserAccount extends javax.swing.JFrame {
     }//GEN-LAST:event_BackMouseClicked
 
     private void account1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_account1MouseClicked
-        sysLogs tt = new sysLogs();
-        tt.setVisible(true);
+        logsStudent lsFrame = new logsStudent();
+        lsFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_account1MouseClicked
 

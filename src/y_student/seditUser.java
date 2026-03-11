@@ -25,7 +25,7 @@ public class seditUser extends javax.swing.JFrame {
      */
     public seditUser() {
         
-        if (config.stopIllegalAccess(this)) return;
+        //if (config.stopIllegalAccess(this)) return;
         initComponents();
         config conf = new config();
          conf.manageHover(SAVE);
@@ -88,9 +88,6 @@ public class seditUser extends javax.swing.JFrame {
         PASS = new javax.swing.JPanel();
         pass = new java.awt.Label();
         passs = new java.awt.TextField();
-        USERTYPE = new javax.swing.JPanel();
-        usertype = new java.awt.Label();
-        type = new javax.swing.JComboBox<>();
         SAVE = new javax.swing.JPanel();
         save = new javax.swing.JLabel();
         image = new javax.swing.JLabel();
@@ -143,7 +140,7 @@ public class seditUser extends javax.swing.JFrame {
         user1.setFont(new java.awt.Font("Segoe UI Black", 1, 20)); // NOI18N
         user1.setForeground(new java.awt.Color(197, 179, 88));
         user1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        user1.setText("EDIT ACCOUNT");
+        user1.setText("STUDENT ACCOUNT");
         user1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 user1MouseClicked(evt);
@@ -246,33 +243,6 @@ public class seditUser extends javax.swing.JFrame {
             }
         });
         jPanel1.add(passs, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 280, 270, 30));
-
-        usertype.setAlignment(java.awt.Label.CENTER);
-        usertype.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        usertype.setName(""); // NOI18N
-        usertype.setText("Usertype:");
-
-        javax.swing.GroupLayout USERTYPELayout = new javax.swing.GroupLayout(USERTYPE);
-        USERTYPE.setLayout(USERTYPELayout);
-        USERTYPELayout.setHorizontalGroup(
-            USERTYPELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(usertype, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        USERTYPELayout.setVerticalGroup(
-            USERTYPELayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(usertype, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-
-        jPanel1.add(USERTYPE, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 80, 30));
-
-        type.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Student", "Teacher" }));
-        type.setName(""); // NOI18N
-        type.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                typeActionPerformed(evt);
-            }
-        });
-        jPanel1.add(type, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 270, 30));
 
         SAVE.setBackground(new java.awt.Color(39, 174, 96));
         SAVE.setForeground(new java.awt.Color(240, 240, 240));
@@ -585,10 +555,6 @@ public class seditUser extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_passsActionPerformed
 
-    private void typeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_typeActionPerformed
-
     public String destination = "";
     
     private void saveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseClicked
@@ -599,24 +565,19 @@ public class seditUser extends javax.swing.JFrame {
     String u_name = namee.getText();
     String u_email = emaill.getText();
     String u_pass = passs.getText();
-    String u_type = type.getSelectedItem().toString();
-    // Siguraduhin na ang 'destination' variable ay may laman (image path)
-    
-    // 1. SQL Query gamit ang "?" placeholders
-    String sql = "UPDATE tbl_user SET u_name = ?, u_email = ?, u_pass = ?, u_type = ?, u_image = ? WHERE u_id = ?";
+    String sql = "UPDATE tbl_user SET u_name = ?, u_email = ?, u_pass = ?, u_image = ? WHERE u_id = ?";
     
     // 2. I-execute gamit ang updateRecord
     // Ang pagkakasunod-sunod dito ay dapat pareho sa "?" sa SQL sa taas
-    int result = conf.updateRecord(sql, u_name, u_email, u_pass, u_type, destination, u_id);
+    int result = conf.updateRecord(sql, u_name, u_email, u_pass, destination, u_id);
 
     if(result > 0){
     JOptionPane.showMessageDialog(null, "Successfully Updated!");
     
     // 1. Buksan ang bago
-    manageUsers mu = new manageUsers();
+    /*manageUsers mu = new manageUsers();
     mu.setVisible(true);
-    
-    // 2. Isara itong kasalukuyang Edit Frame
+    */
     this.dispose(); 
 
     } else {
@@ -642,10 +603,17 @@ this.dispose();
     }//GEN-LAST:event_changepicMouseClicked
 
     private void cancelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cancelMouseClicked
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(null,
+            "Your inputs will not be saved. Are you sure you want to Cancel?", "Logout", javax.swing.JOptionPane.YES_NO_OPTION);
 
-        manageUsers mu = new manageUsers();
-        mu.setVisible(true);
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            config.setSession(null, null, null, null, null);
+            studDashboard dashFrame = new studDashboard();
+        dashFrame.setVisible(true);
         this.dispose();
+        }
+        
+        
     }//GEN-LAST:event_cancelMouseClicked
 
     private void nameeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameeActionPerformed
@@ -701,8 +669,8 @@ this.dispose();
     }//GEN-LAST:event_BackMouseClicked
 
     private void account1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_account1MouseClicked
-        sysLogs tt = new sysLogs();
-        tt.setVisible(true);
+         logsStudent lS = new logsStudent();
+        lS.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_account1MouseClicked
 
@@ -750,7 +718,6 @@ this.dispose();
     private javax.swing.JPanel NAME;
     private javax.swing.JPanel PASS;
     private javax.swing.JPanel SAVE;
-    private javax.swing.JPanel USERTYPE;
     private javax.swing.JPanel a;
     private javax.swing.JLabel account;
     private javax.swing.JLabel account1;
@@ -780,9 +747,7 @@ this.dispose();
     private java.awt.Label pass;
     public java.awt.TextField passs;
     private javax.swing.JLabel save;
-    private javax.swing.JComboBox<String> type;
     private javax.swing.JLabel user;
     private javax.swing.JLabel user1;
-    private java.awt.Label usertype;
     // End of variables declaration//GEN-END:variables
 }

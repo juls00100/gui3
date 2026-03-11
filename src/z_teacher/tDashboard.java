@@ -23,11 +23,15 @@ public class tDashboard extends javax.swing.JFrame {
      * Creates new form tDashboard
      */
     public tDashboard() {
-        
-        config conf = new config();
-        conf.logEvent("User Logged In");
+        if (config.stopIllegalAccess(this)) return;
         initComponents();
-    }
+         config conf = new config();
+        conf.logEvent("Teacher Dashboard Accessed");
+        
+        displayResults(); 
+        
+        
+       }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -292,13 +296,21 @@ public class tDashboard extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(table_results);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 140, -1, 240));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 140, 510, 240));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    void displayResults() {
+        config con = new config();
+        // Use DISTINCT to ensure no row is an exact duplicate of another
+        String sql = "SELECT DISTINCT e_date AS 'Date', "
+                   + "ROUND(e_average, 2) AS 'Rating', " // This also fixes the 2 decimals
+                   + "e_remarks AS 'Remarks' "
+                   + "FROM tbl_evaluation WHERE t_u_id = '" + config.getID() + "'";
+        con.displayData(sql, table_results);
+    }
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
         userAccount accFrame = new userAccount();
         accFrame.setVisible(true);

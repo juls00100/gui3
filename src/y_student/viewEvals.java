@@ -342,8 +342,8 @@ public class viewEvals extends javax.swing.JFrame {
     }//GEN-LAST:event_BackMouseClicked
 
     private void account1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_account1MouseClicked
-        sysLogs tt = new sysLogs();
-        tt.setVisible(true);
+         logsStudent lS = new logsStudent();
+        lS.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_account1MouseClicked
 
@@ -364,7 +364,7 @@ public class viewEvals extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutMouseClicked
 
     private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
-        userAccount accFrame = new userAccount();
+        sUserAccount accFrame = new sUserAccount();
         accFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_profileMouseClicked

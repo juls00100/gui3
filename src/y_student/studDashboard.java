@@ -6,6 +6,7 @@
 package y_student;
 import authenticate.logIn;
 import config.config;
+import javax.swing.ImageIcon;
 import x_admin.adminDashboard;
 import x_admin.sysLogs;
 import x_admin.userAccount;
@@ -19,7 +20,7 @@ public class studDashboard extends javax.swing.JFrame {
         
         
       public studDashboard(String name, String imagePath) {
-        if (config.stopIllegalAccess(this)) return;
+        //if (config.stopIllegalAccess(this)) return;
         displayDetails();
         initComponents(); 
         namee.setText(config.getName());
@@ -27,13 +28,12 @@ public class studDashboard extends javax.swing.JFrame {
         this.currentImagePath = imagePath;
         namee.setText(currentUserName);
         
-        config conf = new config();
-        conf.logEvent("User Logged In");
-        conf.manageHover(a);
-        conf.manageHover(e);
-        conf.manageHover(d);
-        conf.manageHover(g);
-        conf.manageHover(h);
+        setupDashboard();
+       
+        
+        
+        
+        
     }
     public studDashboard() {
         if (config.stopIllegalAccess(this)) return;
@@ -44,7 +44,48 @@ public class studDashboard extends javax.swing.JFrame {
         this.currentImagePath = config.getImage();
         
     }
+    private void setupDashboard() {
+        namee.setText(currentUserName);
+        
+        config conf = new config();
+        // Hover effects
+        conf.manageHover(a); conf.manageHover(i); conf.manageHover(d);
+        conf.manageHover(e); conf.manageHover(g); conf.manageHover(h);
+       
+        
+        displayProfileImage(currentImagePath);
+        
+    }
+    private void displayProfileImage(String path) {
+        if (path != null && !path.isEmpty()) {
+            try {
+                int targetSize = 70; // Matches your layout constraints
+                ImageIcon imgIcon = new ImageIcon(path);
+                java.awt.Image sourceImg = imgIcon.getImage();
 
+                int width = sourceImg.getWidth(null);
+                int height = sourceImg.getHeight(null);
+
+                // Calculate crop to center square
+                int cropSize = Math.min(width, height);
+                int x = (width - cropSize) / 2;
+                int y = (height - cropSize) / 2;
+
+                java.awt.image.BufferedImage buffered = new java.awt.image.BufferedImage(
+                    width, height, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+                java.awt.Graphics2D g2d = buffered.createGraphics();
+                g2d.drawImage(sourceImg, 0, 0, null);
+                g2d.dispose();
+
+                java.awt.image.BufferedImage croppedImg = buffered.getSubimage(x, y, cropSize, cropSize);
+                java.awt.Image finalImg = croppedImg.getScaledInstance(targetSize, targetSize, java.awt.Image.SCALE_SMOOTH);
+
+                profile.setIcon(new ImageIcon(finalImg));
+            } catch (Exception e) {
+                System.out.println("Error processing image: " + e.getMessage());
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,7 +112,6 @@ public class studDashboard extends javax.swing.JFrame {
         account1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         user1 = new javax.swing.JLabel();
-        logout = new javax.swing.JLabel();
         profile = new config.CircularLabel();
         user2 = new javax.swing.JLabel();
         namee = new javax.swing.JLabel();
@@ -202,7 +242,7 @@ public class studDashboard extends javax.swing.JFrame {
 
         Back.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
         Back.setForeground(new java.awt.Color(240, 240, 240));
-        Back.setText("Back");
+        Back.setText("Log out");
         Back.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BackMouseClicked(evt);
@@ -216,7 +256,7 @@ public class studDashboard extends javax.swing.JFrame {
             .addGroup(iLayout.createSequentialGroup()
                 .addComponent(back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         iLayout.setVerticalGroup(
@@ -269,19 +309,6 @@ public class studDashboard extends javax.swing.JFrame {
             }
         });
         jPanel3.add(user1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 480, 70));
-
-        logout.setBackground(new java.awt.Color(0, 33, 71));
-        logout.setFont(new java.awt.Font("Segoe UI Black", 0, 11)); // NOI18N
-        logout.setForeground(new java.awt.Color(197, 179, 88));
-        logout.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        logout.setText("Logout");
-        logout.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(197, 179, 88)));
-        logout.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                logoutMouseClicked(evt);
-            }
-        });
-        jPanel3.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 30, 70, 20));
 
         profile.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -357,8 +384,8 @@ public class studDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_userMouseEntered
 
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
-        adminDashboard ad = new adminDashboard();
-        ad.setVisible(true);
+        studDashboard s = new studDashboard();
+        s.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backMouseClicked
 
@@ -369,8 +396,8 @@ public class studDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_BackMouseClicked
 
     private void account1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_account1MouseClicked
-        sysLogs tt = new sysLogs();
-        tt.setVisible(true);
+        logsStudent lS = new logsStudent();
+        lS.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_account1MouseClicked
 
@@ -378,22 +405,8 @@ public class studDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_user1MouseClicked
 
-    private void logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseClicked
-
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(null,
-            "Do you really want to log out?", "Logout", javax.swing.JOptionPane.YES_NO_OPTION);
-
-        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
-            
-            config.setSession(null, null, null, null, null);
-            logIn loginFrame = new logIn();
-            loginFrame.setVisible(true);
-            this.dispose();
-        }
-    }//GEN-LAST:event_logoutMouseClicked
-
     private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
-        userAccount accFrame = new userAccount();
+        sUserAccount accFrame = new sUserAccount();
         accFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_profileMouseClicked
@@ -454,7 +467,6 @@ public class studDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JLabel logout;
     public javax.swing.JLabel namee;
     private javax.swing.JLabel profile;
     private javax.swing.JLabel user;
