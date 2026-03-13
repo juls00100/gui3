@@ -589,8 +589,8 @@ if (rowIndex != -1) {
     }//GEN-LAST:event_addMouseClicked
 
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
-        userAccount accFrame = new userAccount();
-        accFrame.setVisible(true);
+        editUser editFrame = new editUser();
+        editFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_accountMouseClicked
 

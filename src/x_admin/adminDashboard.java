@@ -495,8 +495,8 @@ public class adminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_userMouseEntered
 
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
-       userAccount accFrame = new userAccount();
-        accFrame.setVisible(true);
+       editUser editFrame = new editUser();
+        editFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_accountMouseClicked
 
@@ -519,8 +519,8 @@ public class adminDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_dashbordMouseClicked
 
     private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
-        userAccount accFrame = new userAccount();
-        accFrame.setVisible(true);
+        editUser editFrame = new editUser();
+        editFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_profileMouseClicked
 

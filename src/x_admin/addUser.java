@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import y_student.sUserAccount;
 /**
  *
  * @author juls
@@ -645,8 +646,8 @@ public class addUser extends javax.swing.JFrame {
     }//GEN-LAST:event_cancelMouseClicked
 
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
-        userAccount accFrame = new userAccount();
-        accFrame.setVisible(true);
+        editUser editFrame = new editUser();
+        editFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_accountMouseClicked
 

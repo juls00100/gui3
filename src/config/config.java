@@ -7,6 +7,7 @@
 
     import java.awt.Graphics;
     import java.awt.Graphics2D;
+import java.awt.Image;
     import java.awt.RenderingHints;
     import java.awt.geom.Ellipse2D;
     import java.sql.Connection;
@@ -47,6 +48,18 @@ public static void setSession(String id, String name, String email, String type,
     public static String getEmail() { return currentEmail; }
     public static String getType() { return currentType; }
     public static String getImage() { return currentImage; }
+    
+    public static void setName(String name) {
+    currentName = name; // Replace with your actual variable name in config
+}
+
+    public static void setEmail(String email) {
+        currentEmail = email; // Replace with your actual variable name in config
+    }
+
+    public static void setImage(String imagePath) {
+        currentImage = imagePath; // Replace with your actual variable name in config
+    }
     
      public static void setCurrentName(String name) {
         if(name != null && !name.isEmpty()) {
@@ -335,14 +348,27 @@ public static void setSession(String id, String name, String email, String type,
         System.out.println("Cleanup Error: " + e.getMessage());
     }
 }
-     
-     public static ImageIcon resizeImage(String imgPath, int width, int height) {
-    ImageIcon path = new ImageIcon(imgPath);
-    java.awt.Image img = path.getImage();
-    java.awt.Image newImg = img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+     // Centralized function in config.java
+    public ImageIcon resizeImage(String imgPath, byte[] pic, int width, int height) {
+    ImageIcon MyImage = (imgPath != null) ? new ImageIcon(imgPath) : new ImageIcon(pic);
+    
+    Image img = MyImage.getImage();
+    int newWidth = width;
+    int newHeight = height;
+
+    double imgWidth = img.getWidth(null);
+    double imgHeight = img.getHeight(null);
+    double labelWidth = width;
+    double labelHeight = height;
+    
+    double scale = Math.min(labelWidth / imgWidth, labelHeight / imgHeight);
+
+    newWidth = (int) (imgWidth * scale);
+    newHeight = (int) (imgHeight * scale);
+
+    Image newImg = img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
     return new ImageIcon(newImg);
 }
-    //LOGS NI
      
        public void logEvent(String action) {
     String sql = "INSERT INTO tbl_logs (u_id, l_action) VALUES (?, ?)";

@@ -10,7 +10,6 @@ import authenticate.logIn;
 import config.config;
 import javax.swing.JOptionPane;
 import x_admin.sysLogs;
-import x_admin.userAccount;
 import config.config;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -67,18 +66,40 @@ public class studEvaluate extends javax.swing.JFrame {
     private void handleFinalSubmission() {
         if (isSubmitted) return; 
         
-        if (teacherDropdown.getSelectedItem() == null || 
-            teacherDropdown.getSelectedItem().toString().equals("Select a Teacher")) {
+            String selectedTeacher = teacherDropdown.getSelectedItem().toString();
+            String studentID = config.getID();
+            String teacherID = "";
+            String remarks = txtComments.getText().trim();
+           
+        
+        if (selectedTeacher.equals("Select a Teacher")) {
             JOptionPane.showMessageDialog(null, "Please select a teacher before submitting.");
             return;
         }
-
-    String teacherName = teacherDropdown.getSelectedItem().toString();
-    String studentID = config.getID(); 
-    String remarks = txtComments.getText();
-    if (remarks.isEmpty()) {
-        remarks = "No specific comments provided.";
-    }
+        
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:aes.db")) {
+        String findTeacher = "SELECT u_id FROM tbl_user WHERE u_name = ? AND u_type = 'Teacher'";            
+        
+        try (PreparedStatement pst = conn.prepareStatement(findTeacher)) {
+            pst.setString(1, selectedTeacher);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    teacherID = rs.getString("u_id");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Teacher not found.");
+                    return; 
+                }
+            }
+        }
+        } catch (SQLException e) {
+            System.out.println("Teacher ID Fetch Error: " + e.getMessage());
+        }
+        
+         if (remarks.isEmpty()) {
+            remarks = "No specific comments provided.";
+        }
+        
+    
     double total = 0.00;
     for (int s : scores) total += s;
     
@@ -88,16 +109,16 @@ public class studEvaluate extends javax.swing.JFrame {
     String sem = "2nd Semester";
     
     String sql = "INSERT INTO tbl_evaluation (t_u_id, s_u_id, e_remarks, e_average, e_year, e_sem, e_date) " +
-                 "VALUES ((SELECT t_u_id FROM tbl_teacher WHERE t_name = ?), ?, ?, ?, ?, ?, DATE('now'))";
+                 "VALUES (?, ?, ?, ?, ?, ?, DATE('now'))";
     
     try (Connection conn = DriverManager.getConnection("jdbc:sqlite:aes.db");
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
         
         isSubmitted = true;
                 
-        pstmt.setString(1, teacherDropdown.getSelectedItem().toString());
-        pstmt.setString(2, config.getID());
-        pstmt.setString(3, txtComments.getText());
+        pstmt.setString(1, teacherID);
+        pstmt.setString(2, studentID);
+        pstmt.setString(3, remarks);
         pstmt.setDouble(4, average); 
         pstmt.setString(5, year);
         pstmt.setString(6, sem);
@@ -106,6 +127,7 @@ public class studEvaluate extends javax.swing.JFrame {
         
         scores.clear();
         JOptionPane.showMessageDialog(null, "Evaluation Saved! \nAverage Score: " + average);
+        
         new studDashboard().setVisible(true);
         this.dispose();
         

@@ -7,7 +7,6 @@ package y_student;
 
 import authenticate.logIn;
 import config.config;
-import x_admin.userAccount;
 
 /**
  *
@@ -21,15 +20,18 @@ public class sUserAccount extends javax.swing.JFrame {
     public sUserAccount() {
         if (config.stopIllegalAccess(this)) return;
         initComponents();
-        
-        displayDetails();
         config conf = new config();
+        displayDetails();
         conf.logEvent("User Logged In");
         conf.manageHover(a);
         conf.manageHover(e);
         conf.manageHover(d);
         conf.manageHover(g);
         conf.manageHover(h);
+        String path = config.getImage();
+        if(path != null){
+        profile.setIcon(conf.resizeImage(path, null, 120, 120));
+    }
     }
 
     /**
@@ -397,13 +399,25 @@ public class sUserAccount extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     private void displayDetails(){
     namee.setText(config.getName()); 
-    
-    String path = config.getImage(); 
-    if (path != null) {
-        // Use your config helper to scale and set the image to the 'profile' label
-    profile.setIcon(config.resizeImage(path, 120, 120));}
 }
     
+    public void displayImage() {
+    String sql = "SELECT u_image FROM tbl_user WHERE u_id = ?";
+    try (java.sql.Connection conn = java.sql.DriverManager.getConnection("jdbc:sqlite:aes.db");
+         java.sql.PreparedStatement pst = conn.prepareStatement(sql)) {
+        
+        pst.setString(1, config.getID());
+        try (java.sql.ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                String path = rs.getString("u_image");
+                config conf = new config();
+                profile.setIcon(conf.resizeImage(path, null, 120, 120));
+            }
+        }
+    } catch (java.sql.SQLException e) {
+        System.out.println("Error loading image: " + e.getMessage());
+    }
+}
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
         sUserAccount accFrame = new sUserAccount();
         accFrame.setVisible(true);
@@ -476,8 +490,8 @@ public class sUserAccount extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutMouseClicked
 
     private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
-        userAccount accFrame = new userAccount();
-        accFrame.setVisible(true);
+        seditUser editFrame = new seditUser();
+        editFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_profileMouseClicked
 

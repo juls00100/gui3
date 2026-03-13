@@ -8,31 +8,77 @@ package z_teacher;
 
 import authenticate.logIn;
 import config.config;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import x_admin.adminDashboard;
 import x_admin.manageQ;
 import x_admin.sysLogs;
-import x_admin.userAccount;
 /**
  *
  * @author juls
  */
 public class tDashboard extends javax.swing.JFrame {
 
-    /**
-     * Creates new form tDashboard
-     */
-    public tDashboard() {
+    private String currentImagePath;
+    private String currentUserName;
+    
+    public tDashboard(String name, String imagePath) {
         if (config.stopIllegalAccess(this)) return;
         initComponents();
-         config conf = new config();
-        conf.logEvent("Teacher Dashboard Accessed");
-        
+        this.currentUserName = name;
+        this.currentImagePath = imagePath;
+        namee.setText(currentUserName);
+        setupDashboard();
         displayResults(); 
-        
-        
-       }
+        displayStatistics();
 
+        //OTTTTTTTTTTTTTTTEN
+    }
+
+    public tDashboard() {
+    if (config.stopIllegalAccess(this)) return;
+    initComponents();
+    
+    // 1. Get data from the global session
+    this.currentUserName = config.getName();
+    this.currentImagePath = config.getImage();
+    
+    // 2. SET THE NAME LABEL
+    namee.setText(this.currentUserName);
+    
+    // 3. LOAD THE IMAGE (using the remedy function)
+    setupDashboard(); 
+    
+    config conf = new config();
+    conf.logEvent("Teacher Dashboard Accessed");
+    
+    displayResults(); 
+    displayStatistics();
+}
+    
+      private void setupDashboard() {
+        
+        config conf = new config();
+        // Hover effects
+        conf.manageHover(a);  conf.manageHover(d);
+         conf.manageHover(h);
+
+        conf.manageHover(C); 
+        
+        // Update the image using the crop logic
+        if (currentImagePath != null && !currentImagePath.isEmpty()) {
+        // Pass the path, null for byte array, and the label dimensions
+        profile.setIcon(conf.resizeImage(currentImagePath, null, profile.getWidth(), profile.getHeight()));
+    }
+        
+    }
+      
+   
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -48,22 +94,23 @@ public class tDashboard extends javax.swing.JFrame {
         account = new javax.swing.JLabel();
         d = new javax.swing.JPanel();
         dashbord = new javax.swing.JLabel();
-        e = new javax.swing.JPanel();
-        jLabel13 = new javax.swing.JLabel();
-        g = new javax.swing.JPanel();
-        user = new javax.swing.JLabel();
         i = new javax.swing.JPanel();
         back = new javax.swing.JLabel();
         Back = new javax.swing.JLabel();
         h = new javax.swing.JPanel();
-        account1 = new javax.swing.JLabel();
+        logs = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         user1 = new javax.swing.JLabel();
-        logout = new javax.swing.JLabel();
         profile = new config.CircularLabel();
         namee = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_results = new javax.swing.JTable();
+        C = new javax.swing.JPanel();
+        lbl_totalAvg = new javax.swing.JLabel();
+        users5 = new javax.swing.JLabel();
+        C1 = new javax.swing.JPanel();
+        lbl_totalStudents = new javax.swing.JLabel();
+        users6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -98,7 +145,7 @@ public class tDashboard extends javax.swing.JFrame {
             .addComponent(account, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
         );
 
-        jPanel2.add(a, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 160, -1));
+        jPanel2.add(a, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 160, -1));
 
         d.setBackground(new java.awt.Color(197, 179, 88));
         d.setForeground(new java.awt.Color(197, 179, 88));
@@ -123,62 +170,7 @@ public class tDashboard extends javax.swing.JFrame {
         });
         d.add(dashbord, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 160, 30));
 
-        jPanel2.add(d, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 160, -1));
-
-        e.setBackground(new java.awt.Color(197, 179, 88));
-        e.setForeground(new java.awt.Color(197, 179, 88));
-        e.setPreferredSize(new java.awt.Dimension(142, 30));
-
-        jLabel13.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("VIEW EVALUATIONS");
-        jLabel13.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel13MouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout eLayout = new javax.swing.GroupLayout(e);
-        e.setLayout(eLayout);
-        eLayout.setHorizontalGroup(
-            eLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-        );
-        eLayout.setVerticalGroup(
-            eLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(e, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 160, -1));
-
-        g.setBackground(new java.awt.Color(197, 179, 88));
-        g.setForeground(new java.awt.Color(197, 179, 88));
-
-        user.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        user.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        user.setText("EVALUATE");
-        user.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-        user.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                userMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                userMouseEntered(evt);
-            }
-        });
-
-        javax.swing.GroupLayout gLayout = new javax.swing.GroupLayout(g);
-        g.setLayout(gLayout);
-        gLayout.setHorizontalGroup(
-            gLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(user, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        gLayout.setVerticalGroup(
-            gLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(user, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(g, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, 160, 30));
+        jPanel2.add(d, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 160, -1));
 
         i.setBackground(new java.awt.Color(44, 62, 80));
 
@@ -191,7 +183,7 @@ public class tDashboard extends javax.swing.JFrame {
 
         Back.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
         Back.setForeground(new java.awt.Color(240, 240, 240));
-        Back.setText("Back");
+        Back.setText("Log out");
         Back.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BackMouseClicked(evt);
@@ -205,7 +197,7 @@ public class tDashboard extends javax.swing.JFrame {
             .addGroup(iLayout.createSequentialGroup()
                 .addComponent(back)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         iLayout.setVerticalGroup(
@@ -220,12 +212,12 @@ public class tDashboard extends javax.swing.JFrame {
         h.setForeground(new java.awt.Color(197, 179, 88));
         h.setPreferredSize(new java.awt.Dimension(142, 30));
 
-        account1.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
-        account1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        account1.setText("SYSTEM LOGS");
-        account1.addMouseListener(new java.awt.event.MouseAdapter() {
+        logs.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
+        logs.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logs.setText("MY LOGS");
+        logs.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                account1MouseClicked(evt);
+                logsMouseClicked(evt);
             }
         });
 
@@ -233,14 +225,14 @@ public class tDashboard extends javax.swing.JFrame {
         h.setLayout(hLayout);
         hLayout.setHorizontalGroup(
             hLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(account1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+            .addComponent(logs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
         );
         hLayout.setVerticalGroup(
             hLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(account1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+            .addComponent(logs, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
         );
 
-        jPanel2.add(h, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 160, -1));
+        jPanel2.add(h, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 160, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 220, 430));
 
@@ -258,19 +250,6 @@ public class tDashboard extends javax.swing.JFrame {
             }
         });
         jPanel3.add(user1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 480, 70));
-
-        logout.setBackground(new java.awt.Color(0, 33, 71));
-        logout.setFont(new java.awt.Font("Segoe UI Black", 0, 11)); // NOI18N
-        logout.setForeground(new java.awt.Color(197, 179, 88));
-        logout.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        logout.setText("Logout");
-        logout.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(197, 179, 88)));
-        logout.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                logoutMouseClicked(evt);
-            }
-        });
-        jPanel3.add(logout, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 30, 70, 20));
 
         profile.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -296,30 +275,99 @@ public class tDashboard extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(table_results);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 140, 510, 240));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 620, 220));
+
+        C.setBackground(new java.awt.Color(45, 52, 54));
+        C.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lbl_totalAvg.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 24)); // NOI18N
+        lbl_totalAvg.setForeground(new java.awt.Color(240, 240, 240));
+        lbl_totalAvg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        C.add(lbl_totalAvg, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, 120, 40));
+
+        users5.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        users5.setForeground(new java.awt.Color(240, 240, 240));
+        users5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        users5.setText("OVERALL RATING");
+        C.add(users5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, -1));
+
+        jPanel1.add(C, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 240, 110));
+
+        C1.setBackground(new java.awt.Color(45, 52, 54));
+        C1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lbl_totalStudents.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 24)); // NOI18N
+        lbl_totalStudents.setForeground(new java.awt.Color(240, 240, 240));
+        lbl_totalStudents.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        C1.add(lbl_totalStudents, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, 120, 40));
+
+        users6.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        users6.setForeground(new java.awt.Color(240, 240, 240));
+        users6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        users6.setText("STUDENTS EVALUATED");
+        C1.add(users6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, -1));
+
+        jPanel1.add(C1, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 110, 240, 110));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    void displayResults() {
-        config con = new config();
-        // Use DISTINCT to ensure no row is an exact duplicate of another
+
+    public void displayResults() {
         String sql = "SELECT DISTINCT e_date AS 'Date', "
-                   + "ROUND(e_average, 2) AS 'Rating', " // This also fixes the 2 decimals
+                   + "ROUND(e_average, 2) AS 'Rating', "
                    + "e_remarks AS 'Remarks' "
-                   + "FROM tbl_evaluation WHERE t_u_id = '" + config.getID() + "'";
-        con.displayData(sql, table_results);
+                   + "FROM tbl_evaluation WHERE t_u_id = ?"; 
+
+        try (java.sql.Connection conn = java.sql.DriverManager.getConnection("jdbc:sqlite:aes.db");
+             java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // 2. This line now works because there is exactly one '?' in the SQL above
+            pstmt.setInt(1, Integer.parseInt(config.getID()));
+
+            try (java.sql.ResultSet rs = pstmt.executeQuery()) {
+                table_results.setModel(net.proteanit.sql.DbUtils.resultSetToTableModel(rs));
+            }
+
+        } catch (java.sql.SQLException e) {
+            System.out.println("Display Error: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("ID Error: Invalid Teacher ID format");
+        }
     }
+    
+ public void displayStatistics() {
+    String sql = "SELECT COUNT(s_u_id), AVG(e_average) FROM tbl_evaluation WHERE t_u_id = ?";
+    
+    try (Connection conn = DriverManager.getConnection("jdbc:sqlite:aes.db");
+         PreparedStatement pst = conn.prepareStatement(sql)) {
+        
+        pst.setString(1, config.getID());
+        
+        try (ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                // lbl_totalStudents and lbl_totalAvg are the names in your .form
+                lbl_totalStudents.setText(String.valueOf(rs.getInt(1)));
+                
+                // Formats the average to 2 decimal places (e.g., 85.50)
+                double avg = rs.getDouble(2);
+                lbl_totalAvg.setText(String.format("%.2f", avg));
+            }
+        }
+    } catch (SQLException e) {
+        System.out.println("Error calculating statistics: " + e.getMessage());
+    }
+}
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
-        userAccount accFrame = new userAccount();
+        teditUser accFrame = new teditUser();
         accFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_accountMouseClicked
 
     private void dashbordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashbordMouseClicked
-        tDashboard dashFrame = new tDashboard();
-        dashFrame.setVisible(true);
+        tDashboard c= new tDashboard();
+        c.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_dashbordMouseClicked
 
@@ -331,18 +379,6 @@ public class tDashboard extends javax.swing.JFrame {
 
     }//GEN-LAST:event_dMouseEntered
 
-    private void jLabel13MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel13MouseClicked
-   
-    }//GEN-LAST:event_jLabel13MouseClicked
-
-    private void userMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userMouseClicked
-    
-    }//GEN-LAST:event_userMouseClicked
-
-    private void userMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_userMouseEntered
-
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
         adminDashboard ad = new adminDashboard();
         ad.setVisible(true);
@@ -350,23 +386,6 @@ public class tDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_backMouseClicked
 
     private void BackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackMouseClicked
-        tDashboard s = new tDashboard();
-        s.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_BackMouseClicked
-
-    private void account1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_account1MouseClicked
-        sysLogs tt = new sysLogs();
-        tt.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_account1MouseClicked
-
-    private void user1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_user1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_user1MouseClicked
-
-    private void logoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logoutMouseClicked
-
         int confirm = javax.swing.JOptionPane.showConfirmDialog(null,
             "Do you really want to log out?", "Logout", javax.swing.JOptionPane.YES_NO_OPTION);
 
@@ -376,11 +395,21 @@ public class tDashboard extends javax.swing.JFrame {
             loginFrame.setVisible(true);
             this.dispose();
         }
-    }//GEN-LAST:event_logoutMouseClicked
+    }//GEN-LAST:event_BackMouseClicked
+
+    private void logsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logsMouseClicked
+        tLogs tt = new tLogs();
+        tt.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_logsMouseClicked
+
+    private void user1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_user1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_user1MouseClicked
 
     private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
-        userAccount accFrame = new userAccount();
-        accFrame.setVisible(true);
+        teditUser editFrame = new teditUser();
+        editFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_profileMouseClicked
 
@@ -421,26 +450,27 @@ public class tDashboard extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Back;
+    private javax.swing.JPanel C;
+    private javax.swing.JPanel C1;
     private javax.swing.JPanel a;
     private javax.swing.JLabel account;
-    private javax.swing.JLabel account1;
     private javax.swing.JLabel back;
     private javax.swing.JPanel d;
     private javax.swing.JLabel dashbord;
-    private javax.swing.JPanel e;
-    private javax.swing.JPanel g;
     private javax.swing.JPanel h;
     private javax.swing.JPanel i;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel logout;
+    private javax.swing.JLabel lbl_totalAvg;
+    private javax.swing.JLabel lbl_totalStudents;
+    private javax.swing.JLabel logs;
     public javax.swing.JLabel namee;
     private javax.swing.JLabel profile;
     private javax.swing.JTable table_results;
-    private javax.swing.JLabel user;
     private javax.swing.JLabel user1;
+    private javax.swing.JLabel users5;
+    private javax.swing.JLabel users6;
     // End of variables declaration//GEN-END:variables
 }

@@ -226,11 +226,17 @@ public class logIn extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Login Successful!");
 
                 if (type.equals("Admin")) {
+                    rs.close();
                     new x_admin.adminDashboard().setVisible(true);
+                    this.dispose();
                 } else if (type.equals("Student")) {
+                    rs.close();
                     new y_student.studDashboard().setVisible(true);
+                    this.dispose();
                 } else if (type.equals("Teacher")) {
+                    rs.close();
                     new z_teacher.tDashboard().setVisible(true);
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "User type not recognized.");
                     return;

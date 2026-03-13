@@ -9,7 +9,6 @@ import config.config;
 import javax.swing.ImageIcon;
 import x_admin.adminDashboard;
 import x_admin.sysLogs;
-import x_admin.userAccount;
 /**
  *
  * @author juls
@@ -23,17 +22,12 @@ public class studDashboard extends javax.swing.JFrame {
         //if (config.stopIllegalAccess(this)) return;
         displayDetails();
         initComponents(); 
-        namee.setText(config.getName());
         this.currentUserName = name;
         this.currentImagePath = imagePath;
         namee.setText(currentUserName);
         
         setupDashboard();
        
-        
-        
-        
-        
     }
     public studDashboard() {
         if (config.stopIllegalAccess(this)) return;
@@ -43,48 +37,32 @@ public class studDashboard extends javax.swing.JFrame {
         this.currentUserName = config.getName();
         this.currentImagePath = config.getImage();
         
-    }
-    private void setupDashboard() {
         namee.setText(currentUserName);
-        
-        config conf = new config();
-        // Hover effects
-        conf.manageHover(a); conf.manageHover(i); conf.manageHover(d);
-        conf.manageHover(e); conf.manageHover(g); conf.manageHover(h);
-       
-        
-        displayProfileImage(currentImagePath);
-        
+        setupDashboard();
     }
-    private void displayProfileImage(String path) {
-        if (path != null && !path.isEmpty()) {
-            try {
-                int targetSize = 70; // Matches your layout constraints
-                ImageIcon imgIcon = new ImageIcon(path);
-                java.awt.Image sourceImg = imgIcon.getImage();
+    
+    public void setupDashboard() {
+    config conf = new config();
+    
+    // 1. Get the current size of your profile label
+    int w = profile.getWidth();
+    int h = profile.getHeight();
+    
+    // 2. Fallback in case the UI hasn't calculated the size yet
+    if(w <= 0) w = 120; 
+    if(h <= 0) h = 120;
 
-                int width = sourceImg.getWidth(null);
-                int height = sourceImg.getHeight(null);
+    // 3. Call the logic (Make sure you already updated config.java as we discussed!)
+    if (currentImagePath != null && !currentImagePath.isEmpty()) {
+        profile.setIcon(conf.resizeImage(currentImagePath, null, w, h));
+    }
+    
 
-                // Calculate crop to center square
-                int cropSize = Math.min(width, height);
-                int x = (width - cropSize) / 2;
-                int y = (height - cropSize) / 2;
-
-                java.awt.image.BufferedImage buffered = new java.awt.image.BufferedImage(
-                    width, height, java.awt.image.BufferedImage.TYPE_INT_ARGB);
-                java.awt.Graphics2D g2d = buffered.createGraphics();
-                g2d.drawImage(sourceImg, 0, 0, null);
-                g2d.dispose();
-
-                java.awt.image.BufferedImage croppedImg = buffered.getSubimage(x, y, cropSize, cropSize);
-                java.awt.Image finalImg = croppedImg.getScaledInstance(targetSize, targetSize, java.awt.Image.SCALE_SMOOTH);
-
-                profile.setIcon(new ImageIcon(finalImg));
-            } catch (Exception e) {
-                System.out.println("Error processing image: " + e.getMessage());
-            }
-        }
+        conf.manageHover(a); conf.manageHover(i); conf.manageHover(d);
+        conf.manageHover(e); conf.manageHover(g); 
+       
+    
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -112,9 +90,9 @@ public class studDashboard extends javax.swing.JFrame {
         account1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         user1 = new javax.swing.JLabel();
+        namee = new javax.swing.JLabel();
         profile = new config.CircularLabel();
         user2 = new javax.swing.JLabel();
-        namee = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -310,6 +288,11 @@ public class studDashboard extends javax.swing.JFrame {
         });
         jPanel3.add(user1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 480, 70));
 
+        namee.setBackground(new java.awt.Color(44, 62, 80));
+        namee.setFont(new java.awt.Font("Segoe UI Black", 1, 20)); // NOI18N
+        namee.setForeground(new java.awt.Color(240, 240, 240));
+        jPanel3.add(namee, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, 140, 40));
+
         profile.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 profileMouseClicked(evt);
@@ -322,18 +305,13 @@ public class studDashboard extends javax.swing.JFrame {
         user2.setFont(new java.awt.Font("Segoe UI Black", 1, 20)); // NOI18N
         user2.setForeground(new java.awt.Color(197, 179, 88));
         user2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        user2.setText("HELLO! ");
+        user2.setText("TIME TO REVENGE!");
         user2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 user2MouseClicked(evt);
             }
         });
-        jPanel1.add(user2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 200, 280, 120));
-
-        namee.setBackground(new java.awt.Color(44, 62, 80));
-        namee.setFont(new java.awt.Font("Segoe UI Black", 1, 20)); // NOI18N
-        namee.setForeground(new java.awt.Color(240, 240, 240));
-        jPanel1.add(namee, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 240, 140, 40));
+        jPanel1.add(user2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 280, 120));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 500));
 
@@ -344,11 +322,11 @@ public class studDashboard extends javax.swing.JFrame {
     
     String path = config.getImage(); 
     if (path != null) {
-        // Use your config helper to scale and set the image to the 'profile' label
-    profile.setIcon(config.resizeImage(path, 120, 120));}
+        config conf = new config();
+        profile.setIcon(conf.resizeImage(path, null, 120, 120));}
 }
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
-        sUserAccount accFrame = new sUserAccount();
+        seditUser accFrame = new seditUser();
         accFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_accountMouseClicked
@@ -390,9 +368,22 @@ public class studDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_backMouseClicked
 
     private void BackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackMouseClicked
-        studDashboard s = new studDashboard();
-        s.setVisible(true);
-        this.dispose();
+         
+        config conf = new config();
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(null,
+            "Do you really want to log out?",
+            "Logout Confirmation",
+            javax.swing.JOptionPane.YES_NO_OPTION);
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+            conf.logEvent("User Logged Out");
+            new logIn().setVisible(true);
+            this.dispose();
+        } else {
+            System.out.println("Logout cancelled by user.");
+        }
+        
+        
     }//GEN-LAST:event_BackMouseClicked
 
     private void account1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_account1MouseClicked
@@ -405,15 +396,15 @@ public class studDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_user1MouseClicked
 
-    private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
-        sUserAccount accFrame = new sUserAccount();
-        accFrame.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_profileMouseClicked
-
     private void user2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_user2MouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_user2MouseClicked
+
+    private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
+        seditUser accFrame = new seditUser();
+        accFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_profileMouseClicked
 
     /**
      * @param args the command line arguments
