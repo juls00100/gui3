@@ -44,6 +44,7 @@ public class signup1 extends javax.swing.JFrame {
         emails = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         name = new javax.swing.JTextField();
+        lbl_password_msg = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
@@ -107,7 +108,7 @@ public class signup1 extends javax.swing.JFrame {
             .addComponent(backlabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
         );
 
-        jPanel4.add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 310, -1, 30));
+        jPanel4.add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, -1, 30));
 
         r.setBackground(new java.awt.Color(0, 204, 51));
         r.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -129,7 +130,7 @@ public class signup1 extends javax.swing.JFrame {
         });
         r.add(registerbuton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 80, 30));
 
-        jPanel4.add(r, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 310, 80, -1));
+        jPanel4.add(r, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 320, 80, -1));
 
         bg.setBackground(new java.awt.Color(0, 33, 71));
         bg.setForeground(new java.awt.Color(0, 33, 71));
@@ -152,16 +153,14 @@ public class signup1 extends javax.swing.JFrame {
         bg.setLayout(bgLayout);
         bgLayout.setHorizontalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bgLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(gg, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(gg, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
         );
         bgLayout.setVerticalGroup(
             bgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(gg, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
         );
 
-        jPanel4.add(bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 350, 240, 30));
+        jPanel4.add(bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, 210, 30));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 1, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(240, 240, 240));
@@ -181,6 +180,11 @@ public class signup1 extends javax.swing.JFrame {
                 passsActionPerformed(evt);
             }
         });
+        passs.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                passsKeyReleased(evt);
+            }
+        });
         jPanel4.add(passs, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 190, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 1, 16)); // NOI18N
@@ -189,6 +193,11 @@ public class signup1 extends javax.swing.JFrame {
         jPanel4.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, 30));
 
         emails.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        emails.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                emailsFocusLost(evt);
+            }
+        });
         emails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 emailsActionPerformed(evt);
@@ -209,10 +218,14 @@ public class signup1 extends javax.swing.JFrame {
         });
         jPanel4.add(name, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 190, -1));
 
+        lbl_password_msg.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        lbl_password_msg.setForeground(new java.awt.Color(255, 0, 51));
+        jPanel4.add(lbl_password_msg, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, 300, 20));
+
         jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, 450, 500));
 
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Academic Evaluations no.2.png"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/the logo 3.2(circular 190px).png"))); // NOI18N
         jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 450, 190));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
@@ -256,31 +269,94 @@ public class signup1 extends javax.swing.JFrame {
         String uName = name.getText();
         String uEmail = emails.getText();
         String uPass = new String(passs.getPassword());
+        
+        String hashedPassword = con.hashPassword(uPass);
+        
+        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+        if (!uEmail.matches(emailRegex)) {
+            JOptionPane.showMessageDialog(this, "Invalid Email Format! Must contain @ and a domain (e.g., .com)");
+            return; 
+        }
+        
+        if (uPass.length() < 8) {
+            JOptionPane.showMessageDialog(this, "Password must be at least 8 characters long!");
+            return;
+        }
+        if (!uPass.matches(".*[A-Z].*")) {
+            JOptionPane.showMessageDialog(this, "Password must contain at least one Uppercase letter!");
+            return;
+        }
 
-        // Step 1: Insert into the main User Table
-        String sqlUser = "INSERT INTO tbl_user (u_name, u_email, u_pass, u_type, u_status) VALUES (?, ?, ?, ?, ?)";
+        if (!uPass.matches(".*[0-9].*")) {
+            JOptionPane.showMessageDialog(this, "Password must contain at least one Number!");
+            return;
+        }
+        
+        if (!lbl_password_msg.getText().equals("✓ Strong Password!")) {
+            JOptionPane.showMessageDialog(this, "Please follow the password requirements.");
+            return;
+        }
+        
+        String defaultRole = "Student"; 
+        String defaultStatus = "Approved"; 
 
-        if(con.addRecord(sqlUser, uName, uEmail, uPass, "Student", "Pending") == 1) {
+    String sqlUser = "INSERT INTO tbl_user (u_name, u_email, u_pass, u_type, u_status) VALUES (?, ?, ?, ?, ?)";
 
-            // Step 2: Insert into the specialized table based on the type
-            
-                String sqlTeacher = "INSERT INTO tbl_teacher ( t_name, t_email, t_pass, t_status) VALUES (?,?,?, ?)";
-                con.addRecord(sqlTeacher, uName, uEmail, uPass, "Pending");
-            } 
-            
+    if(con.addRecord(sqlUser, uName, uEmail, hashedPassword, defaultRole, defaultStatus) == 1) {
+
+    if(defaultRole.equals("Student")) {
+        String sqlStudent = "INSERT INTO tbl_student (s_name, s_email, s_status) VALUES (?, ?, ?)";
+        con.addRecord(sqlStudent, uName, uEmail, defaultStatus);
+        
+    } else if(defaultRole.equals("Teacher")) {
+        String sqlTeacher = "INSERT INTO tbl_teacher (t_name, t_email, t_status) VALUES (?, ?, ?)";
+        con.addRecord(sqlTeacher, uName, uEmail, defaultStatus);
+        
+    } else if(defaultRole.equals("Admin")) {
+        String sqlAdmin = "INSERT INTO tbl_admin (a_name, a_email, a_status) VALUES (?, ?, ?)";
+        con.addRecord(sqlAdmin, uName, uEmail, defaultStatus);
+        System.out.println("Data saved to tbl_admin");
+    }
             name.setText("");
             emails.setText("");
             passs.setText("");
-            /*else if(type.equals("Student")) {
-                String sqlStudent = "INSERT INTO tbl_student (s_name, s_email) VALUES (?, ?)";
-                con.addRecord(sqlStudent, uName, uEmail);
-            }*/
+            
             JOptionPane.showMessageDialog(null, "Thank for registering, please wait for admins approval. Tanks!");
             new logIn().setVisible(true);
             this.dispose();
 
-        
+        } else {
+        JOptionPane.showMessageDialog(null, "Registration Failed. Email might already exist.");
+        }
     }//GEN-LAST:event_registerbuton1MouseClicked
+
+    private void passsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passsKeyReleased
+        String password = new String(passs.getPassword());
+    
+    if (password.isEmpty()) {
+        lbl_password_msg.setText("");
+    } else if (password.length() < 8) {
+        lbl_password_msg.setText("X Minimum 8 characters required.");
+    } else if (!password.matches(".*[A-Z].*")) {
+        lbl_password_msg.setText("X Must contain at least one Uppercase letter.");
+    } else if (!password.matches(".*[0-9].*")) {
+        lbl_password_msg.setText("X Must contain at least one Number.");
+    } else {
+        // Change color to Green if it passes all rules!
+        lbl_password_msg.setForeground(new java.awt.Color(0, 153, 51)); 
+        lbl_password_msg.setText("✓ Strong Password!");
+    }
+    }//GEN-LAST:event_passsKeyReleased
+
+    private void emailsFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailsFocusLost
+        String email = emails.getText();
+    String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$"; 
+    
+    if (!email.isEmpty() && !email.matches(emailRegex)) {
+        JOptionPane.showMessageDialog(this, "Invalid Email! Please include @ and a domain.");
+        emails.requestFocus();
+    }
+    }//GEN-LAST:event_emailsFocusLost
 
     /**
      * @param args the command line arguments
@@ -331,6 +407,7 @@ public class signup1 extends javax.swing.JFrame {
     public javax.swing.JPanel jPanel2;
     public javax.swing.JPanel jPanel3;
     public javax.swing.JPanel jPanel4;
+    public javax.swing.JLabel lbl_password_msg;
     public javax.swing.JTextField name;
     public javax.swing.JPasswordField passs;
     public javax.swing.JPanel r;

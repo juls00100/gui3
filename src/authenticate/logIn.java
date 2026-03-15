@@ -36,8 +36,8 @@ public class logIn extends javax.swing.JFrame {
         bg = new javax.swing.JPanel();
         gg = new javax.swing.JLabel();
         passs = new javax.swing.JPasswordField();
-        jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -169,15 +169,15 @@ public class logIn extends javax.swing.JFrame {
 
         jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 0, 450, 510));
 
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/Academic Evaluations no.2.png"))); // NOI18N
-        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 450, 190));
-
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(197, 179, 88));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("WELCOME TO ACADEMIC EVALUATIONS!");
         jPanel3.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 450, -1));
+
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/the logo 3.2(circular 190px).png"))); // NOI18N
+        jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, 450, 190));
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 500));
 
@@ -203,8 +203,9 @@ public class logIn extends javax.swing.JFrame {
     // 1. Get credentials from input fields
     String userEmail = emails.getText();
     String userPass = new String(passs.getPassword()); 
-    String query = "SELECT * FROM tbl_user WHERE u_email = '" + userEmail + "' AND u_pass = '" + userPass + "'";
-
+    String hashedInput = conf.hashPassword(userPass);
+    
+    String query = "SELECT * FROM tbl_user WHERE u_email = '" + userEmail + "' AND u_pass = '" + hashedInput + "'";
     try {
         java.sql.ResultSet rs = conf.getData(query);
 
@@ -212,9 +213,10 @@ public class logIn extends javax.swing.JFrame {
             String status = rs.getString("u_status");
             String type = rs.getString("u_type");
 
-            if (!status.equalsIgnoreCase("pending") && !status.equalsIgnoreCase("Approved")) {
-                JOptionPane.showMessageDialog(null, "Your account is " + status + ". Please contact the Administrator.");
-            } else {
+            if (status.equalsIgnoreCase("Pending")) {
+                JOptionPane.showMessageDialog(null, "Your account is still PENDING. Please contact the Administrator.");
+            } 
+            else { 
                 config.setSession(
                     rs.getString("u_id"),
                     rs.getString("u_name"),
@@ -224,17 +226,21 @@ public class logIn extends javax.swing.JFrame {
                 );
 
                 JOptionPane.showMessageDialog(null, "Login Successful!");
-
+                
+                
                 if (type.equals("Admin")) {
                     rs.close();
+                    conf.logEvent("Logged In");
                     new x_admin.adminDashboard().setVisible(true);
                     this.dispose();
                 } else if (type.equals("Student")) {
                     rs.close();
+                    conf.logEvent("Logged In");
                     new y_student.studDashboard().setVisible(true);
                     this.dispose();
                 } else if (type.equals("Teacher")) {
                     rs.close();
+                    conf.logEvent("Logged In");
                     new z_teacher.tDashboard().setVisible(true);
                     this.dispose();
                 } else {
@@ -245,12 +251,11 @@ public class logIn extends javax.swing.JFrame {
                 this.dispose();
             }
         } else {
-            JOptionPane.showMessageDialog(null, "INVALID EMAIL OR PASSWORD.");
+            JOptionPane.showMessageDialog(null, "User is not registered yet or wrong credentials!");
             emails.setText(""); 
             passs.setText("");
         }
         
-        // Always close the result set to free database locks
         conf.closeResult(rs);
 
     } catch (java.sql.SQLException e) {

@@ -8,6 +8,8 @@ package x_admin;
 
 import authenticate.logIn;
 import config.config;
+import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -27,6 +29,9 @@ public class manageUsers extends javax.swing.JFrame {
     public manageUsers() {
         if (config.stopIllegalAccess(this)) return;
         initComponents();
+        
+        namee.setText(config.getName()); 
+        displayProfileImage();
         displayUser();
         config conf = new config();
         conf.manageHover(ADD);
@@ -41,7 +46,22 @@ public class manageUsers extends javax.swing.JFrame {
         conf.manageHover(g);
         conf.manageHover(h);
         conf.manageHover(i);
+        
+        conf.designTable(table_user);
+       
+
+
     }
+    
+    public void displayProfileImage() {
+        String path = config.getImage();
+        if (path != null && !path.isEmpty()) {
+            config conf = new config();
+            profile.setIcon(conf.resizeImage(path, null, profile.getWidth(), profile.getHeight()));
+        }
+    }
+    
+    
     void displayUser(){
         
         config con = new config();
@@ -52,6 +72,7 @@ public class manageUsers extends javax.swing.JFrame {
         table_user.setRowSorter(sorter);
 
         searchbox.getDocument().addDocumentListener(new DocumentListener() {
+            
     @Override
     public void insertUpdate(DocumentEvent e) { search(); }
     @Override
@@ -69,9 +90,11 @@ public class manageUsers extends javax.swing.JFrame {
     }
     }
     );
-        con.displayData("SELECT u_id, u_name, u_email, u_type, u_status FROM tbl_user", table_user);
+        con.displayData("SELECT u_id AS 'USER ID', u_name AS 'NAME', u_email AS 'EMAIL', u_type AS 'USER TYPE', u_status AS 'STATUS' FROM tbl_user", table_user);
                 
     }
+    
+    
     
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -80,6 +103,9 @@ public class manageUsers extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         user1 = new javax.swing.JLabel();
+        namee = new javax.swing.JLabel();
+        profile = new config.CircularLabel();
+        totp4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table_user = new javax.swing.JTable();
         DELETE = new javax.swing.JPanel();
@@ -104,11 +130,11 @@ public class manageUsers extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         g = new javax.swing.JPanel();
         user = new javax.swing.JLabel();
+        h = new javax.swing.JPanel();
+        account1 = new javax.swing.JLabel();
         i = new javax.swing.JPanel();
         back = new javax.swing.JLabel();
         Back = new javax.swing.JLabel();
-        h = new javax.swing.JPanel();
-        account1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -121,7 +147,7 @@ public class manageUsers extends javax.swing.JFrame {
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         user1.setFont(new java.awt.Font("Segoe UI Black", 1, 20)); // NOI18N
-        user1.setForeground(new java.awt.Color(197, 179, 88));
+        user1.setForeground(new java.awt.Color(240, 240, 240));
         user1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         user1.setText("MANAGE USERS");
         user1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -129,7 +155,24 @@ public class manageUsers extends javax.swing.JFrame {
                 user1MouseClicked(evt);
             }
         });
-        jPanel3.add(user1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 0, 450, 70));
+        jPanel3.add(user1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, 680, 70));
+
+        namee.setBackground(new java.awt.Color(44, 62, 80));
+        namee.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
+        namee.setForeground(new java.awt.Color(240, 240, 240));
+        jPanel3.add(namee, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 140, 30));
+
+        profile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                profileMouseClicked(evt);
+            }
+        });
+        jPanel3.add(profile, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 60));
+
+        totp4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        totp4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/admin.png"))); // NOI18N
+        jPanel3.add(totp4, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 10, 70, 50));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 70));
 
@@ -143,6 +186,10 @@ public class manageUsers extends javax.swing.JFrame {
 
             }
         ));
+        table_user.setOpaque(false);
+        table_user.setRowHeight(30);
+        table_user.setShowHorizontalLines(false);
+        table_user.setShowVerticalLines(false);
         table_user.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 table_userMouseClicked(evt);
@@ -327,7 +374,7 @@ public class manageUsers extends javax.swing.JFrame {
 
         evaluations.setFont(new java.awt.Font("Segoe UI Black", 0, 14)); // NOI18N
         evaluations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        evaluations.setText("ACADEMIC CONTENT");
+        evaluations.setText("VIEW EVALUATIONS");
         evaluations.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 evaluationsMouseClicked(evt);
@@ -428,42 +475,6 @@ public class manageUsers extends javax.swing.JFrame {
 
         jPanel2.add(g, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 160, 30));
 
-        i.setBackground(new java.awt.Color(44, 62, 80));
-
-        back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/arrow20.png"))); // NOI18N
-        back.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                backMouseClicked(evt);
-            }
-        });
-
-        Back.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
-        Back.setForeground(new java.awt.Color(240, 240, 240));
-        Back.setText("Back");
-        Back.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BackMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout iLayout = new javax.swing.GroupLayout(i);
-        i.setLayout(iLayout);
-        iLayout.setHorizontalGroup(
-            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(iLayout.createSequentialGroup()
-                .addComponent(back)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        iLayout.setVerticalGroup(
-            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(i, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 90, 30));
-
         h.setBackground(new java.awt.Color(197, 179, 88));
         h.setForeground(new java.awt.Color(197, 179, 88));
         h.setPreferredSize(new java.awt.Dimension(142, 30));
@@ -489,6 +500,40 @@ public class manageUsers extends javax.swing.JFrame {
         );
 
         jPanel2.add(h, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 160, -1));
+
+        i.setBackground(new java.awt.Color(44, 62, 80));
+        i.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(197, 179, 88)));
+
+        back.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/arrow20.png"))); // NOI18N
+
+        Back.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
+        Back.setForeground(new java.awt.Color(197, 179, 88));
+        Back.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Back.setText("Back");
+        Back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BackMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout iLayout = new javax.swing.GroupLayout(i);
+        i.setLayout(iLayout);
+        iLayout.setHorizontalGroup(
+            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(iLayout.createSequentialGroup()
+                .addComponent(back)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        iLayout.setVerticalGroup(
+            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(i, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 90, 30));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 220, 430));
 
@@ -520,6 +565,7 @@ public class manageUsers extends javax.swing.JFrame {
                 int result = conf.updateRecord(sql, id); 
                 if (result > 0) { javax.swing.JOptionPane.showMessageDialog(null, "User Approved!"); 
                 displayUser(); 
+                conf.logEvent("Approved a user.");
                 } else { 
                     javax.swing.JOptionPane.showMessageDialog(null, "Error updating database."); 
                 } 
@@ -537,8 +583,9 @@ if (rowIndex != -1) {
     if (confirm == JOptionPane.YES_OPTION) {
         config conf = new config();
         String sql = "DELETE FROM tbl_user WHERE u_id = ?";
-        conf.deleteRecord(sql, id); // Assuming your config has a deleteRecord method
-        displayUser(); // Refresh the table
+        conf.deleteRecord(sql, id); 
+        displayUser(); 
+        conf.logEvent("Deleted a user.");
     }
 } else {
     JOptionPane.showMessageDialog(null, "Please select a user to delete.");
@@ -554,12 +601,13 @@ if (rowIndex != -1) {
     } else {
         TableModel model = table_user.getModel();
         editUser ed = new editUser();
+        config conf = new config();
+        conf.logEvent("Edited user's info.");
         
-        ed.iddd.setText("" + model.getValueAt(row, 0)); // ID
-        ed.namee.setText("" + model.getValueAt(row, 1)); // Name
-        ed.emaill.setText("" + model.getValueAt(row, 2)); // Email
-        ed.passs.setText(""); // Huwag kunin ang password sa table (madalas empty ito sa display)
-        
+        ed.iddd.setText("" + model.getValueAt(row, 0));
+        ed.nameee.setText("" + model.getValueAt(row, 1)); 
+        ed.emaill.setText("" + model.getValueAt(row, 2)); 
+        ed.passs.setText("");
         ed.setVisible(true);
         this.dispose();
     }
@@ -616,18 +664,6 @@ if (rowIndex != -1) {
         // TODO add your handling code here:
     }//GEN-LAST:event_userMouseEntered
 
-    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
-        adminDashboard ad = new adminDashboard();
-        ad.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_backMouseClicked
-
-    private void BackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackMouseClicked
-        adminDashboard ad = new adminDashboard();
-        ad.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_BackMouseClicked
-
     private void account1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_account1MouseClicked
             sysLogs tt = new sysLogs();
         tt.setVisible(true);
@@ -643,6 +679,18 @@ if (rowIndex != -1) {
     private void table_userMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_userMouseClicked
 
     }//GEN-LAST:event_table_userMouseClicked
+
+    private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
+        editUser editFrame = new editUser();
+        editFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_profileMouseClicked
+
+    private void BackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackMouseClicked
+        adminDashboard ad = new adminDashboard();
+        ad.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BackMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -705,9 +753,12 @@ if (rowIndex != -1) {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JLabel namee;
+    private javax.swing.JLabel profile;
     private javax.swing.JLabel search;
     private javax.swing.JTextField searchbox;
     private javax.swing.JTable table_user;
+    private javax.swing.JLabel totp4;
     private javax.swing.JLabel user;
     private javax.swing.JLabel user1;
     // End of variables declaration//GEN-END:variables

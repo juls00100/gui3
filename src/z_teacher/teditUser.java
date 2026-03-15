@@ -29,8 +29,10 @@ public class teditUser extends javax.swing.JFrame {
         initComponents();
         config conf = new config();
         namee.setText(config.getName());
+        nameee.setText(config.getName());
         emaill.setText(config.getEmail());
         iddd.setText(config.getID());
+        displayProfileImage();
         
         this.destination = config.getImage(); 
     if (this.destination != null && !this.destination.isEmpty()) {
@@ -48,7 +50,14 @@ public class teditUser extends javax.swing.JFrame {
         conf.manageHover(i);
         
     }
-    
+    public void displayProfileImage() {
+        String path = config.getImage();
+        if (path != null && !path.isEmpty()) {
+            config conf = new config();
+            profile.setIcon(conf.resizeImage(path, null, profile.getWidth(), profile.getHeight()));
+        }
+    }
+
     public void displayImage() {
         if (destination != null && !destination.isEmpty()) {
             image.setIcon(resizeImage(destination, null));
@@ -86,6 +95,9 @@ public class teditUser extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         user1 = new javax.swing.JLabel();
+        namee = new javax.swing.JLabel();
+        profile = new config.CircularLabel();
+        totp4 = new javax.swing.JLabel();
         ID = new javax.swing.JPanel();
         id = new java.awt.Label();
         NAME = new javax.swing.JPanel();
@@ -103,7 +115,7 @@ public class teditUser extends javax.swing.JFrame {
         changepic = new javax.swing.JLabel();
         CANCEL = new javax.swing.JPanel();
         cancel = new javax.swing.JLabel();
-        namee = new java.awt.TextField();
+        nameee = new java.awt.TextField();
         idd = new javax.swing.JPanel();
         iddd = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -111,11 +123,11 @@ public class teditUser extends javax.swing.JFrame {
         account = new javax.swing.JLabel();
         d = new javax.swing.JPanel();
         dashbord = new javax.swing.JLabel();
+        h = new javax.swing.JPanel();
+        logs = new javax.swing.JLabel();
         i = new javax.swing.JPanel();
         back = new javax.swing.JLabel();
         Back = new javax.swing.JLabel();
-        h = new javax.swing.JPanel();
-        logs = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -131,13 +143,30 @@ public class teditUser extends javax.swing.JFrame {
         user1.setFont(new java.awt.Font("Segoe UI Black", 1, 20)); // NOI18N
         user1.setForeground(new java.awt.Color(197, 179, 88));
         user1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        user1.setText("EDIT ACCOUNT");
+        user1.setText("TEACHER ACCOUNT");
         user1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 user1MouseClicked(evt);
             }
         });
-        jPanel3.add(user1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 0, 450, 70));
+        jPanel3.add(user1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, 680, 70));
+
+        namee.setBackground(new java.awt.Color(44, 62, 80));
+        namee.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
+        namee.setForeground(new java.awt.Color(240, 240, 240));
+        jPanel3.add(namee, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 140, 30));
+
+        profile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                profileMouseClicked(evt);
+            }
+        });
+        jPanel3.add(profile, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 60));
+
+        totp4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        totp4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/man.png"))); // NOI18N
+        jPanel3.add(totp4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 90, 50));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 70));
 
@@ -316,14 +345,14 @@ public class teditUser extends javax.swing.JFrame {
 
         jPanel1.add(CANCEL, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 380, 60, 30));
 
-        namee.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-        namee.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        namee.addActionListener(new java.awt.event.ActionListener() {
+        nameee.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        nameee.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        nameee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nameeActionPerformed(evt);
+                nameeeActionPerformed(evt);
             }
         });
-        jPanel1.add(namee, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 180, 270, 30));
+        jPanel1.add(nameee, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 180, 270, 30));
 
         iddd.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         iddd.setEnabled(false);
@@ -395,42 +424,6 @@ public class teditUser extends javax.swing.JFrame {
 
         jPanel2.add(d, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 50, 160, -1));
 
-        i.setBackground(new java.awt.Color(44, 62, 80));
-
-        back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/arrow20.png"))); // NOI18N
-        back.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                backMouseClicked(evt);
-            }
-        });
-
-        Back.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
-        Back.setForeground(new java.awt.Color(240, 240, 240));
-        Back.setText("Back");
-        Back.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BackMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout iLayout = new javax.swing.GroupLayout(i);
-        i.setLayout(iLayout);
-        iLayout.setHorizontalGroup(
-            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(iLayout.createSequentialGroup()
-                .addComponent(back)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        iLayout.setVerticalGroup(
-            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(i, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 90, 30));
-
         h.setBackground(new java.awt.Color(197, 179, 88));
         h.setForeground(new java.awt.Color(197, 179, 88));
         h.setPreferredSize(new java.awt.Dimension(142, 30));
@@ -457,6 +450,39 @@ public class teditUser extends javax.swing.JFrame {
 
         jPanel2.add(h, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 160, -1));
 
+        i.setBackground(new java.awt.Color(44, 62, 80));
+        i.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(197, 179, 88)));
+
+        back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/arrow20.png"))); // NOI18N
+
+        Back.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
+        Back.setForeground(new java.awt.Color(197, 179, 88));
+        Back.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Back.setText("Back");
+        Back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BackMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout iLayout = new javax.swing.GroupLayout(i);
+        i.setLayout(iLayout);
+        iLayout.setHorizontalGroup(
+            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(iLayout.createSequentialGroup()
+                .addComponent(back)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        iLayout.setVerticalGroup(
+            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(i, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 90, 30));
+
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 220, 430));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 500));
@@ -479,34 +505,41 @@ public class teditUser extends javax.swing.JFrame {
     public String destination = "";
     
     private void saveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveMouseClicked
+                                     
     config conf = new config();
-    
-    // Kunin ang data mula sa UI
-    String u_id = iddd.getText();
-    String u_name = namee.getText();
-    String u_email = emaill.getText();
-    String u_pass = passs.getText();
-    
-    if (destination == null || destination.isEmpty()) {
+   if (destination == null || destination.isEmpty()) {
         destination = config.getImage(); 
     }
-    String sql = "UPDATE tbl_user SET u_name = ?, u_email = ?, u_pass = ?, u_image = ? WHERE u_id = ?";
     
-    int result = conf.updateRecord(sql, u_name, u_email, u_pass, destination, u_id);
+    String u_id = iddd.getText();
+    String u_name = nameee.getText();
+    String u_email = emaill.getText();
+    String u_pass = passs.getText().trim();
+    
+    int result;
 
+    if (u_pass.isEmpty()) {
+        String sql = "UPDATE tbl_user SET u_name = ?, u_email = ?, u_image = ? WHERE u_id = ?";
+        result = conf.updateRecord(sql, u_name, u_email, destination, u_id);
+    } else {
+        String hashedPass = conf.hashPassword(u_pass); 
+        String sql = "UPDATE tbl_user SET u_name = ?, u_email = ?, u_pass = ?, u_image = ? WHERE u_id = ?";
+        result = conf.updateRecord(sql, u_name, u_email, hashedPass, destination, u_id);
+    }
+    
     if(result > 0){
-        
         config.setName(u_name);
         config.setEmail(u_email);
         config.setImage(destination);
         
-    JOptionPane.showMessageDialog(null, "Profile Successfully Updated!");
-    
-    new tDashboard().setVisible(true);
+        JOptionPane.showMessageDialog(null, "Profile Successfully Updated!");
+        conf.logEvent("Edited his/her account.");
+        
+        new z_teacher.tDashboard().setVisible(true); 
         this.dispose();
 
     } else {
-        JOptionPane.showMessageDialog(null, "Error: Database is locked or ID not found.");
+        JOptionPane.showMessageDialog(null, "Error: Update failed. Database might be locked.");
     }
 
     }//GEN-LAST:event_saveMouseClicked
@@ -540,9 +573,9 @@ public class teditUser extends javax.swing.JFrame {
         
     }//GEN-LAST:event_cancelMouseClicked
 
-    private void nameeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameeActionPerformed
+    private void nameeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameeeActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nameeActionPerformed
+    }//GEN-LAST:event_nameeeActionPerformed
 
     private void accountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountMouseClicked
         teditUser accFrame = new teditUser();
@@ -564,23 +597,24 @@ public class teditUser extends javax.swing.JFrame {
 
     }//GEN-LAST:event_dMouseEntered
 
-    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
-        adminDashboard ad = new adminDashboard();
-        ad.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_backMouseClicked
-
-    private void BackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackMouseClicked
-        tDashboard s = new tDashboard();
-        s.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_BackMouseClicked
-
     private void logsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_logsMouseClicked
         tLogs tt = new tLogs();
         tt.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_logsMouseClicked
+
+    private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
+        teditUser editFrame = new teditUser();
+        editFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_profileMouseClicked
+
+    private void BackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackMouseClicked
+
+        tDashboard s = new tDashboard();
+        s.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BackMouseClicked
 
     /**
      * @param args the command line arguments
@@ -649,10 +683,13 @@ public class teditUser extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel logs;
     private java.awt.Label name;
-    public java.awt.TextField namee;
+    public javax.swing.JLabel namee;
+    public java.awt.TextField nameee;
     private java.awt.Label pass;
     public java.awt.TextField passs;
+    private javax.swing.JLabel profile;
     private javax.swing.JLabel save;
+    private javax.swing.JLabel totp4;
     private javax.swing.JLabel user1;
     // End of variables declaration//GEN-END:variables
 }

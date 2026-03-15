@@ -19,6 +19,9 @@ public class manageQ extends javax.swing.JFrame {
         if (config.stopIllegalAccess(this)) return;
         initComponents();
         config conf = new config();
+        namee.setText(config.getName()); 
+        displayProfileImage();
+       
         conf.manageHover(ADD);
         conf.manageHover(EDIT);
         conf.manageHover(DELETE);
@@ -31,7 +34,14 @@ public class manageQ extends javax.swing.JFrame {
         conf.manageHover(i);
         totNumQues();
     }
-    
+    public void displayProfileImage() {
+        String path = config.getImage();
+        if (path != null && !path.isEmpty()) {
+            config conf = new config();
+            profile.setIcon(conf.resizeImage(path, null, profile.getWidth(), profile.getHeight()));
+        }
+    }
+
     public void totNumQues() { 
         quessts.setText("");
         config conf = new config(); 
@@ -58,6 +68,9 @@ public class manageQ extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         user1 = new javax.swing.JLabel();
+        namee = new javax.swing.JLabel();
+        profile = new config.CircularLabel();
+        totp4 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         quesnumtot = new javax.swing.JLabel();
         QUES2 = new javax.swing.JLabel();
@@ -81,11 +94,11 @@ public class manageQ extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         g = new javax.swing.JPanel();
         user = new javax.swing.JLabel();
+        h = new javax.swing.JPanel();
+        account1 = new javax.swing.JLabel();
         i = new javax.swing.JPanel();
         back = new javax.swing.JLabel();
         Back = new javax.swing.JLabel();
-        h = new javax.swing.JPanel();
-        account1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -99,7 +112,7 @@ public class manageQ extends javax.swing.JFrame {
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         user1.setFont(new java.awt.Font("Segoe UI Black", 1, 20)); // NOI18N
-        user1.setForeground(new java.awt.Color(197, 179, 88));
+        user1.setForeground(new java.awt.Color(240, 240, 240));
         user1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         user1.setText("MANAGE QUESTIONS");
         user1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -107,7 +120,24 @@ public class manageQ extends javax.swing.JFrame {
                 user1MouseClicked(evt);
             }
         });
-        jPanel3.add(user1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 0, 450, 70));
+        jPanel3.add(user1, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 0, 680, 70));
+
+        namee.setBackground(new java.awt.Color(44, 62, 80));
+        namee.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
+        namee.setForeground(new java.awt.Color(240, 240, 240));
+        jPanel3.add(namee, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 140, 30));
+
+        profile.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        profile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                profileMouseClicked(evt);
+            }
+        });
+        jPanel3.add(profile, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 60, 60));
+
+        totp4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        totp4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/admin.png"))); // NOI18N
+        jPanel3.add(totp4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 10, 60, 50));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 70));
 
@@ -141,9 +171,9 @@ public class manageQ extends javax.swing.JFrame {
         quessts.setRows(5);
         jScrollPane1.setViewportView(quessts);
 
-        jPanel6.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 220));
+        jPanel6.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 510, 310));
 
-        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 140, 510, 220));
+        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 140, 510, 310));
 
         EDIT.setBackground(new java.awt.Color(240, 190, 18));
         EDIT.setForeground(new java.awt.Color(240, 240, 240));
@@ -170,7 +200,7 @@ public class manageQ extends javax.swing.JFrame {
             .addComponent(editBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
         );
 
-        jPanel1.add(EDIT, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 370, -1, 30));
+        jPanel1.add(EDIT, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 290, -1, 30));
 
         DELETE.setBackground(new java.awt.Color(231, 23, 37));
         DELETE.setForeground(new java.awt.Color(240, 240, 240));
@@ -196,7 +226,7 @@ public class manageQ extends javax.swing.JFrame {
             .addComponent(deleteBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        jPanel1.add(DELETE, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 370, 60, 30));
+        jPanel1.add(DELETE, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 350, 60, 30));
 
         ADD.setBackground(new java.awt.Color(80, 200, 120));
         ADD.setForeground(new java.awt.Color(240, 240, 240));
@@ -222,7 +252,7 @@ public class manageQ extends javax.swing.JFrame {
             .addComponent(addBtn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
         );
 
-        jPanel1.add(ADD, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 370, 60, 30));
+        jPanel1.add(ADD, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 230, 60, 30));
 
         jPanel2.setBackground(new java.awt.Color(45, 52, 54));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -360,42 +390,6 @@ public class manageQ extends javax.swing.JFrame {
 
         jPanel2.add(g, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 160, 30));
 
-        i.setBackground(new java.awt.Color(44, 62, 80));
-
-        back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/arrow20.png"))); // NOI18N
-        back.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                backMouseClicked(evt);
-            }
-        });
-
-        Back.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
-        Back.setForeground(new java.awt.Color(240, 240, 240));
-        Back.setText("Back");
-        Back.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                BackMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout iLayout = new javax.swing.GroupLayout(i);
-        i.setLayout(iLayout);
-        iLayout.setHorizontalGroup(
-            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(iLayout.createSequentialGroup()
-                .addComponent(back)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        iLayout.setVerticalGroup(
-            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(i, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 90, 30));
-
         h.setBackground(new java.awt.Color(197, 179, 88));
         h.setForeground(new java.awt.Color(197, 179, 88));
         h.setPreferredSize(new java.awt.Dimension(142, 30));
@@ -422,6 +416,40 @@ public class manageQ extends javax.swing.JFrame {
 
         jPanel2.add(h, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 280, 160, -1));
 
+        i.setBackground(new java.awt.Color(44, 62, 80));
+        i.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(197, 179, 88)));
+
+        back.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/arrow20.png"))); // NOI18N
+
+        Back.setFont(new java.awt.Font("Segoe UI Black", 0, 16)); // NOI18N
+        Back.setForeground(new java.awt.Color(197, 179, 88));
+        Back.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Back.setText("Back");
+        Back.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BackMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout iLayout = new javax.swing.GroupLayout(i);
+        i.setLayout(iLayout);
+        iLayout.setHorizontalGroup(
+            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(iLayout.createSequentialGroup()
+                .addComponent(back)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        iLayout.setVerticalGroup(
+            iLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(back, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Back, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(i, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 350, 90, 30));
+
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 220, 430));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 500));
@@ -439,6 +467,7 @@ public class manageQ extends javax.swing.JFrame {
         if (newQ != null && !newQ.trim().isEmpty()) { 
             conf.addRecord("INSERT INTO tbl_question (q_text) VALUES (?)", newQ); 
             totNumQues(); 
+            conf.logEvent("Added a new question.");
         } 
     }//GEN-LAST:event_addBtnMouseClicked
 
@@ -457,6 +486,7 @@ public class manageQ extends javax.swing.JFrame {
                     if (newQ != null && !newQ.trim().isEmpty()) { 
                         conf.updateRecordOnly("UPDATE tbl_question SET q_text = ? WHERE q_text = ?", newQ, oldQ.trim()); 
                         totNumQues(); 
+                        conf.logEvent("Edited a question.");
                     } 
                 } else {
                     javax.swing.JOptionPane.showMessageDialog(this, "Invalid Question Number!");
@@ -475,12 +505,15 @@ public class manageQ extends javax.swing.JFrame {
         String numStr = javax.swing.JOptionPane.showInputDialog(this, "Enter the Question Number to Delete:"); 
         if (numStr != null) { 
             try { int num = Integer.parseInt(numStr); 
-            config conf = new config(); 
-            java.util.List questions = conf.getQuestionList("SELECT q_text FROM tbl_question"); 
-            if (num > 0 && num <= questions.size()) { 
-                String qToDelete = questions.get(num - 1).toString(); 
-                conf.deleteRecord("DELETE FROM tbl_question WHERE q_text = ?", qToDelete); 
-                totNumQues(); } } catch (Exception e) { 
+                config conf = new config(); 
+                java.util.List questions = conf.getQuestionList("SELECT q_text FROM tbl_question"); 
+                if (num > 0 && num <= questions.size()) { 
+                    String qToDelete = questions.get(num - 1).toString(); 
+                    conf.deleteRecord("DELETE FROM tbl_question WHERE q_text = ?", qToDelete); 
+                    totNumQues(); 
+                    conf.logEvent("Deleted a question.");
+                } 
+            } catch (Exception e) { 
                     javax.swing.JOptionPane.showMessageDialog(this, "Invalid input!"); 
                 } 
         } 
@@ -514,18 +547,6 @@ public class manageQ extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_userMouseEntered
 
-    private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
-        adminDashboard ad = new adminDashboard();
-        ad.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_backMouseClicked
-
-    private void BackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackMouseClicked
-        adminDashboard ad = new adminDashboard();
-        ad.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_BackMouseClicked
-
     private void account1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_account1MouseClicked
         sysLogs tt = new sysLogs();
         tt.setVisible(true);
@@ -537,6 +558,18 @@ public class manageQ extends javax.swing.JFrame {
         ad.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_evaluationsMouseClicked
+
+    private void profileMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profileMouseClicked
+        editUser editFrame = new editUser();
+        editFrame.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_profileMouseClicked
+
+    private void BackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackMouseClicked
+        adminDashboard ad = new adminDashboard();
+        ad.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BackMouseClicked
 
     /**
      * @param args the command line arguments
@@ -601,8 +634,11 @@ public class manageQ extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JLabel namee;
+    private javax.swing.JLabel profile;
     private javax.swing.JLabel quesnumtot;
     private javax.swing.JTextArea quessts;
+    private javax.swing.JLabel totp4;
     private javax.swing.JLabel user;
     private javax.swing.JLabel user1;
     // End of variables declaration//GEN-END:variables
