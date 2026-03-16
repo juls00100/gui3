@@ -274,13 +274,18 @@ import java.security.NoSuchAlgorithmException;
     }
 }
     public synchronized void logEvent(String action) {
-    String sql = "INSERT INTO tbl_logs (l_action, l_timestamp) VALUES (?, DATETIME('now', 'localtime'))";
-    String url = "jdbc:sqlite:aes.db?busy_timeout=5000";
-
-    try (Connection conn = DriverManager.getConnection(url);
+    // 1. First, let's make sure the u_id column exists (Self-Healing Code)
+    try (Connection conn = DriverManager.getConnection("jdbc:sqlite:aes.db?busy_timeout=5000");
+         Statement stmt = conn.createStatement()) {
+        stmt.execute("ALTER TABLE tbl_logs ADD COLUMN u_id TEXT");
+    } catch (SQLException e) {
+    }
+    String sql = "INSERT INTO tbl_logs (l_action, l_timestamp, u_id) VALUES (?, DATETIME('now', 'localtime'), ?)";
+    try (Connection conn = DriverManager.getConnection("jdbc:sqlite:aes.db?busy_timeout=5000");
          PreparedStatement pstmt = conn.prepareStatement(sql)) {
         
         pstmt.setString(1, action);
+        pstmt.setString(2, config.getID()); 
         pstmt.executeUpdate();
         
     } catch (SQLException e) {

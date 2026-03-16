@@ -253,6 +253,7 @@ public class tLogs extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 500));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     public void displayLogs() {
     // Siguroha nga l_action ug l_timestamp ang column names nimo sa DB

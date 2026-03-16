@@ -237,6 +237,7 @@ public class signup1 extends javax.swing.JFrame {
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 500));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nameActionPerformed
@@ -298,7 +299,7 @@ public class signup1 extends javax.swing.JFrame {
         }
         
         String defaultRole = "Student"; 
-        String defaultStatus = "Approved"; 
+        String defaultStatus = "Pending"; 
 
     String sqlUser = "INSERT INTO tbl_user (u_name, u_email, u_pass, u_type, u_status) VALUES (?, ?, ?, ?, ?)";
 
