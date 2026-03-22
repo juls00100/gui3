@@ -24,7 +24,7 @@ public class addUser extends javax.swing.JFrame {
      * Creates new form addUser
      */
     public addUser() {
-        if (config.stopIllegalAccess(this)) return;
+        //if (config.stopIllegalAccess(this)) return;
         initComponents();
         nameee.setText(config.getName()); 
         displayProfileImage();
@@ -237,7 +237,10 @@ public class addUser extends javax.swing.JFrame {
         jPanel1.add(PASS, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 280, 80, 30));
 
         passs.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        passs.setEnabled(false);
         passs.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        passs.setForeground(new java.awt.Color(240, 240, 240));
+        passs.setText("Default: P@ssw0rd");
         passs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passsActionPerformed(evt);
@@ -595,30 +598,33 @@ public class addUser extends javax.swing.JFrame {
     config conf = new config();
     String name = nameee.getText();
     String email = emaill.getText();
-    String pass = passs.getText();
     String userType = type.getSelectedItem().toString();
-    String imagee = (destination == null) ? "" : destination; 
+    String imagee = (destination == null || destination.isEmpty()) 
+                    ? "src/resources/default_user.png" 
+                    : destination;
+    
+    String defaultPassword = "P@ssw0rd";
 
-    if(name.isEmpty() || email.isEmpty() || pass.isEmpty()){
+    if(name.isEmpty() || email.isEmpty()){
         javax.swing.JOptionPane.showMessageDialog(null, "Please fill in all fields!");
         return;
     }
 
-    // 1. Insert the main user
+    String hashedDefault = conf.hashPassword(defaultPassword);
+    
     String sqlUser = "INSERT INTO tbl_user (u_name, u_email, u_pass, u_type, u_status, u_image) "
-                   + "VALUES ('"+name+"', '"+email+"', '"+pass+"', '"+userType+"', 'Approved', '"+imagee+"')";
-
-    if(conf.insertData(sqlUser)){
+            + "VALUES (?, ?, ?, ?, ?, ?)";
+    if(conf.addRecord(sqlUser, name, email, hashedDefault, userType, "Approved", imagee) == 1) {
+    //if(conf.insertData(sqlUser)){
         String uid = "";
         
-        // 2. Fetch ID and close IMMEDIATELY
         try {
             String fetchID = "SELECT u_id FROM tbl_user WHERE u_email = '" + email + "'";
             java.sql.ResultSet rs = conf.getData(fetchID);
             if(rs.next()){
                 uid = rs.getString("u_id");
             }
-            conf.closeResult(rs); // <--- CRITICAL: Close here before the next insert!
+            conf.closeResult(rs); 
         } catch (SQLException ex) {
             System.out.println("Fetch ID Error: " + ex.getMessage());
         }
@@ -627,24 +633,30 @@ public class addUser extends javax.swing.JFrame {
         if (!uid.equals("")) {
             String sqlProfile = "";
             if(userType.equalsIgnoreCase("Teacher")){
-                sqlProfile = "INSERT INTO tbl_teacher (t_u_id, t_name, t_status) VALUES ('"+uid+"', '"+name+"', 'Approved')";
+                sqlProfile = "INSERT INTO tbl_teacher (t_u_id, t_name, t_status) "
+                        + "VALUES ('"+uid+"', '"+name+"', 'Approved')";
             } else if(userType.equalsIgnoreCase("Student")){
-                sqlProfile = "INSERT INTO tbl_student (s_u_id, s_name, s_status) VALUES ('"+uid+"', '"+name+"', 'Approved')";
+                sqlProfile = "INSERT INTO tbl_student (s_u_id, s_name, s_status) "
+                        + "VALUES ('"+uid+"', '"+name+"', 'Approved')";
             } else if(userType.equalsIgnoreCase("Admin")){
-                sqlProfile = "INSERT INTO tbl_admin (a_u_id, a_name, a_status) VALUES ('"+uid+"', '"+name+"', 'Approved')";
+                sqlProfile = "INSERT INTO tbl_admin (a_u_id, a_name, a_status) "
+                        + "VALUES ('"+uid+"', '"+name+"', 'Approved')";
             }
 
             if(!sqlProfile.equals("")){
-                conf.insertData(sqlProfile); // This will now succeed because the lock is released
+                conf.insertData(sqlProfile); 
             }
         }
         
-        javax.swing.JOptionPane.showMessageDialog(null, "Account and Profile Created!");
+        javax.swing.JOptionPane.showMessageDialog(null, "User created! Default password is: " + defaultPassword);
         
-        conf.logEvent("Added a new user.");
+        conf.logEvent("Admin added user: " + email + " with default password.");
         new manageUsers().setVisible(true);
         this.dispose();
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(null, "Registration Failed.");
     }
+
 
 
 

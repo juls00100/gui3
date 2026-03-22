@@ -10,6 +10,8 @@ import authenticate.logIn;
 import config.config;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -63,36 +65,38 @@ public class manageUsers extends javax.swing.JFrame {
     
     
     void displayUser(){
-        
-        config con = new config();
-        String sql = "SELECT * FROM tbl_user";
-        con.displayData(sql, table_user);
-        
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(((DefaultTableModel)table_user.getModel()));
-        table_user.setRowSorter(sorter);
+    config con = new config();
+    
+    // This line populates the table with data from the database
+    // We add u_image at the end so it's available for the Edit/Update forms
+    con.displayData("SELECT u_id AS 'USER ID', u_name AS 'NAME', u_email AS 'EMAIL', "
+            + "u_type AS 'USER TYPE', u_status AS 'STATUS', u_image FROM tbl_user", table_user);
+    
+    table_user.getColumnModel().getColumn(5).setMinWidth(0);
+    table_user.getColumnModel().getColumn(5).setMaxWidth(0);
+    table_user.getColumnModel().getColumn(5).setWidth(0);
+    // Setup for the search functionality
+    TableRowSorter<TableModel> sorter = new TableRowSorter<>(((DefaultTableModel)table_user.getModel()));
+    table_user.setRowSorter(sorter);
 
-        searchbox.getDocument().addDocumentListener(new DocumentListener() {
-            
-    @Override
-    public void insertUpdate(DocumentEvent e) { search(); }
-    @Override
-    public void removeUpdate(DocumentEvent e) { search(); }
-    @Override
-    public void changedUpdate(DocumentEvent e) { search(); }
-    public void search() {
-        String text = searchbox.getText();
-        if (text.trim().length() == 0) {
-            sorter.setRowFilter(null);
-        } else {
-            // (?i) makes the search case-insensitive
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+    searchbox.getDocument().addDocumentListener(new DocumentListener() {
+        @Override
+        public void insertUpdate(DocumentEvent e) { search(); }
+        @Override
+        public void removeUpdate(DocumentEvent e) { search(); }
+        @Override
+        public void changedUpdate(DocumentEvent e) { search(); }
+        
+        public void search() {
+            String text = searchbox.getText();
+            if (text.trim().length() == 0) {
+                sorter.setRowFilter(null);
+            } else {
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+            }
         }
-    }
-    }
-    );
-        con.displayData("SELECT u_id AS 'USER ID', u_name AS 'NAME', u_email AS 'EMAIL', u_type AS 'USER TYPE', u_status AS 'STATUS' FROM tbl_user", table_user);
-                
-    }
+    });
+}
     
     
     
@@ -575,45 +579,47 @@ public class manageUsers extends javax.swing.JFrame {
     }//GEN-LAST:event_approveMouseClicked
 
     private void deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseClicked
-       int rowIndex = table_user.getSelectedRow();
-if (rowIndex != -1) {
-    // Get the ID from the first column (index 0)
-    String id = table_user.getModel().getValueAt(rowIndex, 0).toString();
-    
-    int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this user?", "Warning", JOptionPane.YES_NO_OPTION);
-    if (confirm == JOptionPane.YES_OPTION) {
-        config conf = new config();
-        String sql = "DELETE FROM tbl_user WHERE u_id = ?";
-        conf.deleteRecord(sql, id); 
-        displayUser(); 
-        conf.logEvent("Deleted a user.");
-    }
-} else {
-    JOptionPane.showMessageDialog(null, "Please select a user to delete.");
-}
-       
+        int rowIndex = table_user.getSelectedRow();
+        if (rowIndex != -1) {
+            // Get the ID from the first column (index 0)
+            String id = table_user.getModel().getValueAt(rowIndex, 0).toString();
+
+            int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this user?", "Warning", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                config conf = new config();
+                String sql = "DELETE FROM tbl_user WHERE u_id = ?";
+                conf.deleteRecord(sql, id); 
+                displayUser(); 
+                conf.logEvent("Deleted a user.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Please select a user to delete.");
+        }
+
     }//GEN-LAST:event_deleteMouseClicked
 
     private void editMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editMouseClicked
-                               
-    int row = table_user.getSelectedRow();
-    if(row == -1){
-        JOptionPane.showMessageDialog(null, "Please select a user first!");
-    } else {
-        TableModel model = table_user.getModel();
-        editUser ed = new editUser();
-        config conf = new config();
-        conf.logEvent("Edited user's info.");
-        
-        ed.iddd.setText("" + model.getValueAt(row, 0));
-        ed.nameee.setText("" + model.getValueAt(row, 1)); 
-        ed.emaill.setText("" + model.getValueAt(row, 2)); 
-        ed.passs.setText("");
-        ed.setVisible(true);
-        this.dispose();
-    }
+      
+        int rowIndex = table_user.getSelectedRow();
+         if(rowIndex == -1){
+            JOptionPane.showMessageDialog(null, "Please select a user first!");
+        } else {
+                TableModel model = table_user.getModel();
+                updateUser up = new updateUser();
 
+                // Make sure these numbers (0, 1, 2, 3, 4) match your table columns!
+                up.fillFields(
+            model.getValueAt(rowIndex, 0).toString(), // ID
+            model.getValueAt(rowIndex, 1).toString(), // Name
+            model.getValueAt(rowIndex, 2).toString(), // Email
+            model.getValueAt(rowIndex, 3).toString(), // Type
+            model.getValueAt(rowIndex, 5).toString()  // Image Path (Column 6)
+        );
 
+            up.setVisible(true);
+            this.dispose();
+        }
+            
     }//GEN-LAST:event_editMouseClicked
     public void searchTable() {
         String text = searchbox.getText();
