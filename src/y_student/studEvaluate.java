@@ -859,3 +859,15 @@ public class studEvaluate extends javax.swing.JFrame {
     private javax.swing.JLabel user1;
     // End of variables declaration//GEN-END:variables
 }
+
+//RUN THIS TO SQL LITE
+/*SELECT 
+    e.e_id AS 'Eval ID', 
+    u.u_name AS 'Teacher Name', 
+    ROUND(AVG(d.score),2) AS 'Average Rating', 
+    e.e_date AS 'Date'
+FROM tbl_evaluation e
+INNER JOIN tbl_evaluation_details d ON e.e_id = d.e_id
+INNER JOIN tbl_user u ON e.t_u_id = u.u_id
+GROUP BY e.e_id;
+*/

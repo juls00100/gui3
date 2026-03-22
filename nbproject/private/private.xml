@@ -5,11 +5,15 @@
         <group>
             <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/authenticate/signup1.java</file>
             <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/x_admin/addUser.java</file>
+            <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/y_student/studDashboard.java</file>
+            <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/y_student/studEvaluate.java</file>
+            <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/y_student/seditUser.java</file>
             <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/x_admin/editUser.java</file>
             <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/x_admin/adminDashboard.java</file>
             <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/config/config.java</file>
             <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/x_admin/manageUsers.java</file>
-            <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/x_admin/sysLogs.java</file>
+            <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/y_student/sUserAccount.java</file>
+            <file>file:/C:/Users/SONY/OneDrive/Documents/NetBeansProjects/gui2/src/x_admin/updateUser.java</file>
         </group>
     </open-files>
 </project-private>

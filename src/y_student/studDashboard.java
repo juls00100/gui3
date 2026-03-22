@@ -458,11 +458,11 @@ public class studDashboard extends javax.swing.JFrame {
         users5.setForeground(new java.awt.Color(240, 240, 240));
         users5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         users5.setText("Total Evaluated");
-        C.add(users5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 240, -1));
+        C.add(users5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, -1));
 
         totp.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         totp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/totpp.png"))); // NOI18N
-        C.add(totp, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 60, 30));
+        C.add(totp, new org.netbeans.lib.awtextra.AbsoluteConstraints(-30, 10, 120, 30));
 
         jPanel1.add(C, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 130, 240, 70));
 
@@ -473,7 +473,7 @@ public class studDashboard extends javax.swing.JFrame {
         eprog2.setForeground(new java.awt.Color(240, 240, 240));
         eprog2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         eprog2.setText("Current Semester");
-        D.add(eprog2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 240, 20));
+        D.add(eprog2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 210, 20));
 
         sem.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 24)); // NOI18N
         sem.setForeground(new java.awt.Color(240, 240, 240));
@@ -482,7 +482,7 @@ public class studDashboard extends javax.swing.JFrame {
 
         totp2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         totp2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/calendar.png"))); // NOI18N
-        D.add(totp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 40, 30));
+        D.add(totp2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 60, 30));
 
         jPanel1.add(D, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 290, 240, 70));
 
@@ -531,7 +531,7 @@ public class studDashboard extends javax.swing.JFrame {
         eprog3.setForeground(new java.awt.Color(240, 240, 240));
         eprog3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         eprog3.setText("Current Year");
-        D1.add(eprog3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 240, -1));
+        D1.add(eprog3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 210, -1));
 
         year.setFont(new java.awt.Font("Matura MT Script Capitals", 0, 24)); // NOI18N
         year.setForeground(new java.awt.Color(240, 240, 240));
@@ -540,7 +540,7 @@ public class studDashboard extends javax.swing.JFrame {
 
         totp3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         totp3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/year.png"))); // NOI18N
-        D1.add(totp3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 40, 30));
+        D1.add(totp3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 10, 80, 30));
 
         jPanel1.add(D1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 370, 240, 70));
 
